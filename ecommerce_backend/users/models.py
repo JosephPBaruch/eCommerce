@@ -1,13 +1,18 @@
-# filepath: products/models.py
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class User(models.Model):
-    name = models.CharField(max_length=255)
-    id = models.CharField(max_length=255, primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    username = models.CharField(max_length=255, unique=True, blank=True)
     password = models.CharField(max_length=255)
 
+    def save(self, *args, **kwargs):
+        if not self.username:
+            self.username = str(self.id)
+        super(User, self).save(*args, **kwargs)
+
     def __str__(self):
-        return self.name
+        return self.username
 
 
