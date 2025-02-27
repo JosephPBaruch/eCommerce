@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { TextField, Button, Container, Typography } from '@mui/material';
-// import './App.css';
 
 function CreateUser() {
-  const [username, setusername] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    fetch('http://127.0.0.1:8080/api/users/', {
+    fetch('http://127.0.0.1:8080/users/register/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -17,8 +16,27 @@ function CreateUser() {
     }).then((response) => {
       if (response.ok) {
         console.log('User created!');
+        // Optionally, you can log in the user immediately after registration
+        loginUser(username, password);
       }
     });
+  };
+
+  const loginUser = (username: string, password: string) => {
+    fetch('http://127.0.0.1:8080/users/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    }).then((response) => response.json())
+      .then((data) => {
+        if (data.access) {
+          // Store the access token securely
+          localStorage.setItem('access_token', data.access);
+          console.log('User logged in!');
+        }
+      });
   };
 
   return (
@@ -27,10 +45,10 @@ function CreateUser() {
       <form>
         <div>
           <TextField
-            label="username"
+            label="Username"
             variant="outlined"
             value={username}
-            onChange={(e) => setusername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
         </div>
