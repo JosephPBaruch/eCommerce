@@ -10,9 +10,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
-import Sitemark from './SitemarkIcon';
-import CreateUser from '../../CreateUser';
+import ColorModeIconDropdown from '../../../shared-theme/ColorModeIconDropdown';
+import { SitemarkIcon } from '../../shared/icons';
+import { Link } from 'react-router-dom';
 
 export default function AppAppBar() {
   const [open, setOpen] = React.useState(false);
@@ -35,7 +35,7 @@ export default function AppAppBar() {
       <Container maxWidth="lg">
         <Toolbar variant="dense" disableGutters>
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-            <Sitemark />
+            <SitemarkIcon />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <Button variant="text" color="info" size="small">
                 Stuff
@@ -58,12 +58,16 @@ export default function AppAppBar() {
               alignItems: 'center',
             }}
           >
-            <Button color="primary" variant="text" size="small">
-              Sign in
+            <Link to='/signin'>
+              <Button color="primary" variant="text" size="small">
+                Sign in
             </Button>
-            <Button color="primary" variant="contained" size="small" onClick={CreateUser}>
-              Sign up
-            </Button>
+            </Link>
+            <Link to='/signup'>
+              <Button color="primary" variant="contained" size="small">
+                Sign up
+              </Button>
+            </Link>
             <ColorModeIconDropdown />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
