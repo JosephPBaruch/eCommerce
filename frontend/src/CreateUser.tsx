@@ -16,11 +16,28 @@ function CreateUser() {
     }).then((response) => {
       if (response.ok) {
         console.log('User created!');
-        // Optionally, you can log in the user immediately after registration
         loginUser(username, password);
       }
     });
   };
+
+  const products = () => {
+    const accessToken = localStorage.getItem('access_token');
+
+    fetch('http://127.0.0.1:8080/products/products/', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    }).then((response) => {
+      if (response.ok) {
+        console.log(response.json())
+        return response.json();
+      }
+    }).then((data) => {
+      console.log(data);
+    });
+  }
 
   const loginUser = (username: string, password: string) => {
     fetch('http://127.0.0.1:8080/users/login/', {
@@ -35,9 +52,12 @@ function CreateUser() {
           // Store the access token securely
           localStorage.setItem('access_token', data.access);
           console.log('User logged in!');
+          products()
         }
       });
   };
+
+  
 
   return (
     <Container>

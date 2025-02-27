@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import CreateUser from './CreateUser';
+import CreateProduct from './CreateProduct'
 import './App.css';
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/create-user" element={<CreateUser />} />
           <Route path="/" element={<h1>Home</h1>} />
+          <Route path="/create-product" element={<CreateProduct />} />
         </Routes>
       </div>
     </Router>
