@@ -27,11 +27,12 @@ function CreateUser() {
     fetch('http://127.0.0.1:8080/products/products/', {
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`,
       },
     }).then((response) => {
       if (response.ok) {
-        console.log(response.json())
+        console.log(response)
         return response.json();
       }
     }).then((data) => {
@@ -52,7 +53,7 @@ function CreateUser() {
           // Store the access token securely
           localStorage.setItem('access_token', data.access);
           console.log('User logged in!');
-          products()
+          products() 
         }
       });
   };
