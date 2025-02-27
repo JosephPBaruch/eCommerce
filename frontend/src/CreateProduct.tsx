@@ -1,7 +1,7 @@
 // import { useState } from 'react';
 import { Button, Container, Typography } from '@mui/material';
 
-function CreateUser() {
+function CreateProduct() {
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const accessToken = localStorage.getItem('access_token');
 
@@ -42,4 +42,4 @@ function CreateUser() {
   );
 }
 
-export default CreateUser;
+export default CreateProduct;
