@@ -8,7 +8,9 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Product.objects.filter(user=self.request.user)
+        return Product.objects
+    # .filter(user=self.request.user) 
+    # Apply this filter when creating a view for
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
