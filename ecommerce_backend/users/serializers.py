@@ -1,19 +1,18 @@
 from rest_framework import serializers
 from .models import User
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('username', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
+User = get_user_model()
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
 
     def validate(self, data):
         user = authenticate(**data)
         if user and user.is_active:
-            return user
-        raise serializers.ValidationError("Invalid credentials")
+            return {"user": user}
+        raise serializers.ValidationError("Invalid credentials.")
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
