@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'products',
     'orders',
     'corsheaders',
+    # 'django.db'
+
 ]
 
 MIDDLEWARE = [
