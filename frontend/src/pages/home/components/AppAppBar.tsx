@@ -12,11 +12,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ColorModeIconDropdown from '../../../shared-theme/ColorModeIconDropdown';
 import { SitemarkIcon } from '../../shared/icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function AppAppBar() {
   const [open, setOpen] = React.useState(false);
   const accessToken = localStorage.getItem('access_token');
+  const navigate = useNavigate();
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -25,6 +26,7 @@ export default function AppAppBar() {
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    navigate("/")
   };
 
   return (
