@@ -16,9 +16,15 @@ import { Link } from 'react-router-dom';
 
 export default function AppAppBar() {
   const [open, setOpen] = React.useState(false);
+  const accessToken = localStorage.getItem('access_token');
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
   };
 
   return (
@@ -58,16 +64,24 @@ export default function AppAppBar() {
               alignItems: 'center',
             }}
           >
-            <Link to='/signin'>
-              <Button color="primary" variant="text" size="small">
-                Sign in
-            </Button>
-            </Link>
-            <Link to='/signup'>
-              <Button color="primary" variant="contained" size="small">
-                Sign up
+            {accessToken ? (
+              <Button color="primary" variant="text" size="small" onClick={handleLogout}>
+                Logout
               </Button>
-            </Link>
+            ) : (
+              <>
+                <Link to='/signin'>
+                  <Button color="primary" variant="text" size="small">
+                    Sign in
+                  </Button>
+                </Link>
+                <Link to='/signup'>
+                  <Button color="primary" variant="contained" size="small">
+                    Sign up
+                  </Button>
+                </Link>
+              </>
+            )}
             <ColorModeIconDropdown />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
@@ -101,16 +115,30 @@ export default function AppAppBar() {
                 <MenuItem>Foo</MenuItem>
                 <MenuItem>Bar</MenuItem>
                 <Divider sx={{ my: 3 }} />
-                <MenuItem>
-                  <Button color="primary" variant="contained" fullWidth>
-                    Sign up
-                  </Button>
-                </MenuItem>
-                <MenuItem>
-                  <Button color="primary" variant="outlined" fullWidth>
-                    Sign in
-                  </Button>
-                </MenuItem>
+                {accessToken ? (
+                  <MenuItem>
+                    <Button color="primary" variant="contained" fullWidth onClick={handleLogout}>
+                      Logout
+                    </Button>
+                  </MenuItem>
+                ) : (
+                  <>
+                    <MenuItem>
+                      <Link to='/signup'>
+                        <Button color="primary" variant="contained" fullWidth>
+                          Sign up
+                        </Button>
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link to='/signin'>
+                        <Button color="primary" variant="outlined" fullWidth>
+                          Sign in
+                        </Button>
+                      </Link>
+                    </MenuItem>
+                  </>
+                )}
               </Box>
             </Drawer>
           </Box>

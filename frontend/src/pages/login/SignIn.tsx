@@ -17,6 +17,7 @@ import ForgotPassword from './ForgotPassword';
 import AppTheme from '../../shared-theme/AppTheme';
 import ColorModeSelect from '../../shared-theme/ColorModeSelect';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from '../shared/icons';
+import { useNavigate } from 'react-router-dom';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -66,6 +67,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
+    const navigate = useNavigate();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -75,16 +77,43 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     setOpen(false);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
-    }
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
+    const userData = {
+      username: data.get('email'),
       password: data.get('password'),
-    });
+    };
+
+    try {
+      const response = await fetch('http://127.0.0.1:8080/users/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const result = await response.json();
+      
+      if (result.access && result.refresh) {
+        // Store the access and refresh tokens securely
+        localStorage.setItem('access_token', result.access);
+        localStorage.setItem('refresh_token', result.refresh);
+        console.log('User logged in!');
+      }
+  
+      console.log('Success:', result);
+      navigate("/");
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle registration error
+    }
   };
 
   const validateInputs = () => {
@@ -217,7 +246,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             <Typography sx={{ textAlign: 'center' }}>
               Don&apos;t have an account?{' '}
               <Link
-                href="/material-ui/getting-started/templates/sign-in/"
+                href="/signup"
                 variant="body2"
                 sx={{ alignSelf: 'center' }}
               >

@@ -1,5 +1,36 @@
-.venv
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.swp
+*.swo
 
+# Django
+*.log
+*.pot
+*.pyc
+*.mo
+*.pyo
+*.pyd
+__pycache__/
+db.sqlite3
+media/
+
+# Environments
+.venv
 .env
 
-*.pyc
+# IDEs
+.vscode/
+.idea/
+
+# Node
+node_modules/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
