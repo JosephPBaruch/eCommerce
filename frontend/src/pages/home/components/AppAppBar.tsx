@@ -45,17 +45,11 @@ export default function AppAppBar() {
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
             <SitemarkIcon />
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <Button variant="text" color="info" size="small">
-                Stuff
+              <Button onClick={() => {navigate("/")}} variant="text" color="info" size="small">
+                Buy
               </Button>
-              <Button variant="text" color="info" size="small">
-                Things
-              </Button>
-              <Button variant="text" color="info" size="small">
-                Foo
-              </Button>
-              <Button variant="text" color="info" size="small">
-                Bar
+              <Button onClick={() => {navigate("/sell")}} variant="text" color="info" size="small">
+                Sell
               </Button>
             </Box>
           </Box>

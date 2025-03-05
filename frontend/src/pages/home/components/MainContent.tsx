@@ -191,24 +191,6 @@ export default function MainContent() {
               border: 'none',
             }}
           />
-          <Chip
-            onClick={handleClick}
-            size="medium"
-            label="Foo"
-            sx={{
-              backgroundColor: 'transparent',
-              border: 'none',
-            }}
-          />
-          <Chip
-            onClick={handleClick}
-            size="medium"
-            label="Bar"
-            sx={{
-              backgroundColor: 'transparent',
-              border: 'none',
-            }}
-          />
         </Box>
         <Box
           sx={{
