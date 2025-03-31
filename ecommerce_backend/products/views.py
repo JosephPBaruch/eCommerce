@@ -13,4 +13,5 @@ class ProductViewSet(viewsets.ModelViewSet):
     # Apply this filter when creating a view for
     
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        # serializer.save(user=self.request.user)
+        serializer.save()

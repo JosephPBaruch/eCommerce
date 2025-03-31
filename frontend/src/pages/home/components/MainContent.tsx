@@ -81,7 +81,7 @@ export default function MainContent() {
       }
 
       try {
-        const response = await fetch('http://localhost:8080/products/products/', {
+        const response = await fetch('http://localhost:8080/products/', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
