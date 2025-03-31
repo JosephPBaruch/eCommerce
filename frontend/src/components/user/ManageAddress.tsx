@@ -19,7 +19,6 @@ import {
     DialogContent,
     DialogActions,
     TextField,
-    Grid,
     FormControlLabel,
     Checkbox,
     Tooltip, // For better UX on buttons
@@ -35,6 +34,7 @@ import {
     Save,
     Cancel,
 } from '@mui/icons-material';
+import Grid from '@mui/material/GridLegacy';
 
 export interface Address {
     id: string;
