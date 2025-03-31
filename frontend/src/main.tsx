@@ -33,6 +33,8 @@ createRoot(document.getElementById('root')!).render(
             <Route path="signup" element={<SignUp />} />
             <Route path="user/:username" element={<PublicProfilePage />} />
             <Route path="sell" element={<ProtectedRoute element={<SellItemPage />} />} />
+            <Route path="listing/:listingId" element={<ViewListingPage />} />
+
 
             {/* Protected Routes */}
             <Route path="profile" element={<ProtectedRoute element={<UserProfilePage />} />} />
@@ -40,7 +42,6 @@ createRoot(document.getElementById('root')!).render(
             <Route path="profile/orders/:orderId" element={<ProtectedRoute element={<OrderDetailsPage />} />} />
             <Route path="profile/addresses" element={<ProtectedRoute element={<ManageAddressesPage />} />} />
             <Route path="profile/listings" element={<ProtectedRoute element={<UserListingsPage />} />} />
-            <Route path="listing/:listingId" element={<ProtectedRoute element={<ViewListingPage />} />} />
             <Route path="listing/:listingId/edit" element={<ProtectedRoute element={<EditListingPage />} />} />
 
 

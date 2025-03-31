@@ -95,27 +95,29 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       password: data.get('password'),
     };
 
-    try {
-      const response = await fetch('http://127.0.0.1:8080/users/register/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
+    // Update to actual api call later
+    navigate("/signin")
+  //   try {
+  //     const response = await fetch('http://127.0.0.1:8080/users/register/', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(userData),
+  //     });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('Network response was not ok');
+  //     }
 
-      const result = await response.json();
-      console.log('Success:', result);
-      navigate("/signin")
-      // Handle successful registration (e.g., redirect to login page)
-    } catch (error) {
-      console.error('Error:', error);
-      // Handle registration error
-    }
+  //     const result = await response.json();
+  //     console.log('Success:', result);
+  //     navigate("/signin")
+  //     // Handle successful registration (e.g., redirect to login page)
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //     // Handle registration error
+  //   }
   };
 
   return (
