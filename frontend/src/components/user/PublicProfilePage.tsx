@@ -4,7 +4,6 @@ import {
   Container,
   Typography,
   Paper,
-  Grid,
   Box,
   CircularProgress,
   Alert,
@@ -32,6 +31,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import AppTheme from '../../theme/AppTheme';
 import AppAppBar from '../shared/AppAppBar';
 import Footer from '../shared/Footer'; 
+import Grid from '@mui/material/GridLegacy';
 
 // Import types
 import { PublicUserProfileData } from '../../types/userProfile';

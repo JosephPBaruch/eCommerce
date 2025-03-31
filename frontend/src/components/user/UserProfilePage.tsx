@@ -16,9 +16,8 @@ import {
     Alert,
     Chip,
     IconButton,
-    Link
+
 } from '@mui/material';
-import Grid from '@mui/material/Grid';
 import {
     Email,
     CalendarToday,
@@ -42,6 +41,7 @@ import {
 } from '@mui/icons-material';
 import { fetchUserProfileData } from '../../api/UserProfile';
 import { useNavigate } from 'react-router-dom';
+import Grid from '@mui/material/GridLegacy';
 
 
 const UserProfilePage: React.FC = () => {
