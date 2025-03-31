@@ -18,7 +18,6 @@ import {
     Link as MuiLink, // Alias to avoid conflict with potential Router Link
     IconButton,
 } from '@mui/material';
-import Grid from '@mui/material/Grid';
 import {
     LocalShipping,
     ShoppingCart,
@@ -29,6 +28,7 @@ import {
     Payment, // Icon for payment
     TrackChanges, // Icon for tracking
 } from '@mui/icons-material';
+import Grid from '@mui/material/GridLegacy';
 
 import CssBaseline from '@mui/material/CssBaseline';
 import AppTheme from '../../theme/AppTheme';
