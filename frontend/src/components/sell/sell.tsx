@@ -55,8 +55,8 @@ const conditions: Condition[] = [
 
 
 const SellItemPage: React.FC = () => {
-    const navigate = useNavigate();
-    const { accessToken, isAuthenticated } = useAuth(); // Get auth state if needed for API calls
+    // const navigate = useNavigate();
+    // const { accessToken, isAuthenticated } = useAuth(); // Get auth state if needed for API calls
 
     const [formData, setFormData] = useState<ListingFormData>({
         title: '',

@@ -107,49 +107,44 @@ export const deleteListingApi = async (
     // No return needed for successful delete
 };
 
-export const fetchListingDetails = async (listingId: string): Promise<ListingDetails | null> => {
+export const fetchListingDetails = async (accessToken: string, listingId: string): Promise<ListingDetails | null> => {
   console.log(`Fetching details for listing: ${listingId}`);
 
-  // Simulate not found
-  if (listingId === 'not-found' || listingId === 'listing103') { // Example: listing 103 was inactive
-    return null;
+  try {
+    const response = await fetch(`http://127.0.0.1:8080/products/${listingId}/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        return null; // Listing not found
+      }
+      throw new Error(`Failed to fetch listing details: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    return {
+      id: data.id,
+      title: data.name,
+      description: data.description,
+      price: parseFloat(data.price),
+      category: { id: data.type.toLowerCase(), name: data.type },
+      condition: { id: 'unknown', name: 'Unknown' }, // Adjust if condition data is available
+      status: 'Active', // Assuming active status; adjust if status is provided
+      dateListed: data.created_at,
+      images: data.image ? [{ id: 'img1', url: data.image, altText: `${data.name} image` }] : [],
+      quantity: 1, // Default to 1; adjust if quantity data is available
+      brand: data.brand,
+      seller: { id: 'unknown', username: data.user }, // Adjust if seller ID is available
+    };
+  } catch (error) {
+    console.error('Error fetching listing details:', error);
+    throw error;
   }
-  // Simulate error
-  // if (listingId === 'error-id') {
-  //   throw new Error("Database connection error");
-  // }
-
-  // --- Generate Mock Data ---
-  // Usually fetched based on listingId
-  const mockSeller: SellerInfo = {
-    id: 'user456',
-    username: 'SellerPro',
-    avatarUrl: '/path/to/seller_avatar.jpg', // Replace
-  };
-
-  const mockImages: ListingImageData[] = [
-    { id: 'img1', url: 'https://picsum.photos/400/300?random=1', altText: 'Headphones main view' }, // Replace
-    { id: 'img2', url: 'https://picsum.photos/400/300?random=2', altText: 'Headphones side view' }, // Replace
-    { id: 'img3', url: 'https://picsum.photos/400/300?random=3', altText: 'Headphones with box' }, // Replace
-  ];
-
-   const mockListing: ListingDetails = {
-    id: listingId,
-    title: listingId === 'listing101' ? 'Stylish Wireless Headphones (Used - Like New)' : 'Brand New Unopened Widget',
-    description: "Experience immersive sound with these comfortable wireless headphones. Barely used, in excellent condition. Comes with original packaging and charging cable. Great battery life.\n\nPerfect for music lovers and commuters.",
-    price: listingId === 'listing101' ? 65.00 : 29.99,
-    category: { id: 'electronics', name: 'Electronics' },
-    condition: { id: 'used_like_new', name: 'Used - Like New' },
-    status: 'Active', // Assume only active listings are directly viewable usually
-    dateListed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
-    images: mockImages,
-    quantity: listingId === 'listing101' ? 1 : 5,
-    brand: listingId === 'listing101' ? 'AudioPhile' : 'WidgetCorp',
-    seller: mockSeller,
-  };
-  // --- End Generate Mock Data ---
-
-  return mockListing;
 };
 
 export const fetchActiveListings = async (accessToken: string | null): Promise<ListingCardData[]> => {
