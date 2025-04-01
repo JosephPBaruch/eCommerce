@@ -264,7 +264,7 @@ return (
                   <CardMedia
                     component="img"
                     alt={listing.title}
-                    image={'https://picsum.photos/400/300?random=5'}
+                    image={listing.imageUrl || "https://picsum.photos/400/300?random=5"}
                     sx={{ /* ... */ }}
                   />
                   <StyledCardContent>
