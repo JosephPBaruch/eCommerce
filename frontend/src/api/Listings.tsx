@@ -164,25 +164,31 @@ export const fetchListingDetails = async (listingId: string): Promise<ListingDet
   return mockListing;
 };
 
-export const fetchActiveListings = async (): Promise<ListingCardData[]> => {
+export const fetchActiveListings = async (accessToken: string | null): Promise<ListingCardData[]> => {
   console.log('Fetching active listings...');
+  try {
+    const response = await fetch('http://127.0.0.1:8080/products/listing/', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
 
-  // Simulate API error randomly
-  // if (Math.random() > 0.8) {
-  //   throw new Error("Failed to fetch listings from server.");
-  // }
+    if (!response.ok) {
+      throw new Error(`Failed to fetch listings: ${response.statusText}`);
+    }
 
-  // Return mock data matching ListingCardData structure WITH categoryId
-  return [
-    { id: 'listing101', title: 'Stylish Wireless Headphones (Used - Like New)', price: 65.00, imageUrl: 'https://picsum.photos/400/300?random=1', categoryId: 'electronics' },
-    { id: 'listing201', title: 'Hand-Knitted Scarf - Blue Wool', price: 25.00, imageUrl: 'https://picsum.photos/400/300?random=2', categoryId: 'fashion' },
-    { id: 'listing202', title: 'Used Graphic Design Textbook', price: 40.00, imageUrl: 'https://picsum.photos/400/300?random=3', categoryId: 'other' }, // Example 'other'
-    { id: 'listing203', title: 'Collectible Action Figure - Mint', price: 75.50, categoryId: 'toys', imageUrl: 'https://picsum.photos/400/300?random=4' },
-    { id: 'listing104', title: 'Brand New Unopened Widget', price: 29.99, imageUrl: 'https://picsum.photos/400/300?random=5', categoryId: 'electronics' },
-    { id: 'listing301', title: 'Vintage Leather Briefcase', price: 120.00, imageUrl: 'https://picsum.photos/400/300?random=6', categoryId: 'fashion' },
-    { id: 'listing302', title: 'Ergonomic Office Chair', price: 180.00, imageUrl: 'https://picsum.photos/400/300?random=7', categoryId: 'home' },
-    { id: 'listing303', title: 'Set of 4 Ceramic Mugs', price: 18.50, imageUrl: 'https://picsum.photos/400/300?random=8', categoryId: 'home' },
-  ];
+    const data = await response.json();
+    return data.map((item: any) => ({
+      id: item.id,
+      imageUrl: item.image || '', // Handle empty image
+      description: item.description,
+      price: item.price,
+    }));
+  } catch (error) {
+    console.error('Error fetching active listings:', error);
+    throw error;
+  }
 };
 
 // Fetch listing details specifically for editing (might be same as view endpoint)

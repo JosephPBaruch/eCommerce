@@ -121,7 +121,7 @@ export default function MainContent() {
         //   fetchActiveListings(),
         //   fetchCategories() // Assuming you have this API call
         // ]);
-        const listingsData = await fetchActiveListings();
+        const listingsData = await fetchActiveListings(localStorage.getItem('access_token'));
         setAllListings(listingsData);
         // setCategoriesData(categoriesData); // If fetching categories
       } catch (err) {
@@ -264,7 +264,7 @@ return (
                   <CardMedia
                     component="img"
                     alt={listing.title}
-                    image={listing.imageUrl || '/path/to/placeholder.png'}
+                    image={'https://picsum.photos/400/300?random=5'}
                     sx={{ /* ... */ }}
                   />
                   <StyledCardContent>
