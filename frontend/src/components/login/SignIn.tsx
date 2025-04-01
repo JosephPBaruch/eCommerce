@@ -14,7 +14,8 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from './ForgotPassword';
 import AppTheme from '../../theme/AppTheme';
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from '../shared/icons';
+// import { GoogleIcon, FacebookIcon, SitemarkIcon } from '../shared/icons';
+import {  SitemarkIcon } from '../shared/icons';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext'; // <-- Import useAuth
 import Alert from '@mui/material/Alert'; // <-- Import Alert for errors
@@ -153,6 +154,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
         // Handle cases where tokens are missing in a 2xx response (unexpected)
         throw new Error('Login successful, but tokens were not received.');
       }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error('Login Error:', error);
       // Set the error state in the AuthContext (or handle locally if preferred)
@@ -267,7 +269,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
           </Box>
           <Divider>or</Divider>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Button
+            {/* <Button
               fullWidth
               variant="outlined"
               onClick={() => alert('Sign in with Google')}
@@ -284,7 +286,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
               disabled={isSubmitting}
             >
               Sign in with Facebook
-            </Button>
+            </Button> */}
             <Typography sx={{ textAlign: 'center' }}>
               Don&apos;t have an account?{' '}
               <Link
