@@ -141,7 +141,7 @@ const SellItemPage: React.FC = () => {
             name: formData.title,
             description: formData.description,
             price: parseFloat(formData.price),
-            image: selectedFiles[0] || null, // Use the first image or null
+            image: null, // Use the first image or null
             type: formData.category,
             brand: formData.brand || null,
         };
