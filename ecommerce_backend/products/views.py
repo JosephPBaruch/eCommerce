@@ -1,4 +1,7 @@
 from rest_framework import viewsets
+from rest_framework.mixins import ListModelMixin
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.response import Response
 from .models import Product
 from .serializers import ProductSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -15,3 +18,10 @@ class ProductViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # serializer.save(user=self.request.user)
         serializer.save()
+
+class ProductListingViewSet(ListModelMixin, GenericViewSet):
+    queryset = Product.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        products = self.queryset.values('id', 'image', 'description', 'price')
+        return Response(products)
