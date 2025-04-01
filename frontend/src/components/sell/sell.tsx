@@ -125,8 +125,8 @@ const SellItemPage: React.FC = () => {
         setSuccessMessage(null);
 
         // Basic validation check
-        if (!formData.title || !formData.category || !formData.condition || !formData.price || selectedFiles.length === 0) {
-            setError("Please fill in all required fields and upload at least one image.");
+        if (!formData.title || !formData.category || !formData.price) {
+            setError("Please fill in all required fields.");
             setIsSubmitting(false);
             return;
         }
@@ -135,34 +135,22 @@ const SellItemPage: React.FC = () => {
             setIsSubmitting(false);
             return;
         }
-        if (isNaN(parseInt(formData.quantity, 10)) || parseInt(formData.quantity, 10) <= 0) {
-            setError("Please enter a valid positive quantity.");
-            setIsSubmitting(false);
-            return;
-        }
 
-
-        // Use FormData to send data including files
-        const listingData = new FormData();
-        listingData.append('title', formData.title);
-        listingData.append('description', formData.description);
-        listingData.append('category', formData.category);
-        listingData.append('condition', formData.condition);
-        listingData.append('price', formData.price);
-        listingData.append('quantity', formData.quantity);
-        if (formData.brand) {
-            listingData.append('brand', formData.brand);
-        }
-        // Append files
-        selectedFiles.forEach((file) => {
-            listingData.append('images', file); // Use 'images' as the key, backend should expect an array/list
-        });
+        // Prepare the request body
+        const requestBody = {
+            name: formData.title,
+            description: formData.description,
+            price: parseFloat(formData.price),
+            image: selectedFiles[0] || null, // Use the first image or null
+            type: formData.category,
+            brand: formData.brand || null,
+        };
 
         try {
-            const result = await submitListingApi(listingData, accessToken);
+            const result = await submitListingApi(requestBody, localStorage.getItem('access_token'));
             setSuccessMessage(result.message);
             // Optionally clear form or navigate away
-            setFormData({ // Reset form
+            setFormData({
                 title: '', description: '', category: '', condition: '', price: '', quantity: '1', brand: '',
             });
             setSelectedFiles([]);

@@ -44,40 +44,28 @@ let nextListingId = 105; // Example for potential additions/deletions
 
 // --- Mock API Function ---
 export const submitListingApi = async (
-  listingData: globalThis.FormData, // Use FormData for file uploads
+  listingData: globalThis.FormData,
   accessToken: string | null,
 ): Promise<{ success: boolean; message: string; listingId?: string }> => {
   console.log('Submitting listing...');
-  // Log FormData entries (for debugging)
-  for (let pair of listingData.entries()) {
-    console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
+
+  console.log(listingData)
+  const response = await fetch('http://127.0.0.1:8080/products/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(listingData),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
   }
 
-  // --- Replace with actual fetch ---
-  // const response = await fetch('/api/listings', {
-  //   method: 'POST',
-  //   headers: {
-  //     // 'Content-Type': 'multipart/form-data' is set automatically by browser with FormData
-  //     'Authorization': `Bearer ${accessToken}`,
-  //   },
-  //   body: listingData,
-  // });
-  // if (!response.ok) {
-  //   const errorData = await response.json().catch(() => ({})); // Try parsing error
-  //   throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-  // }
-  // const result = await response.json();
-  // return { success: true, message: 'Listing created successfully!', listingId: result.id };
-  // --- End Replace ---
-
-  // Simulate success/failure
-  if (Math.random() > 0.1) {
-    // Simulate success
-    return { success: true, message: 'Listing created successfully!', listingId: 'newListing123' };
-  } else {
-    // Simulate failure
-    throw new Error('Failed to create listing. Please try again.');
-  }
+  const result = await response.json();
+  return { success: true, message: 'Listing created successfully!', listingId: result.id };
 };
 
 export const fetchUserListings = async (
