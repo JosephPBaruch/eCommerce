@@ -52,10 +52,11 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',  # Enable JWT authentication
+        #  'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Enable JWT authentication
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        # 'rest_framework.permissions.IsAuthenticated',  # Set default permission to IsAuthenticated
+        'rest_framework.permissions.IsAuthenticated',  # Set default permission to IsAuthenticated
     ),
 }
 
