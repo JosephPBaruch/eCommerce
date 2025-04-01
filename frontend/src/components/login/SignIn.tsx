@@ -125,39 +125,34 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
     try {
       // -------------- Real Api Request -----------------------------
-      // const response = await fetch('http://127.0.0.1:8080/users/login/', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(userData),
-      // });
+      const response = await fetch('http://127.0.0.1:8080/users/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
 
-      // const result = await response.json(); // Try to parse JSON regardless of status
+      const result = await response.json(); // Try to parse JSON regardless of status
 
-      // if (!response.ok) {
-      //   // Handle specific API errors (e.g., invalid credentials)
-      //   const errorMessage =
-      //     result?.detail || // Common key for DRF errors
-      //     result?.error || // Generic error key
-      //     `Login failed (Status: ${response.status})`;
-      //   throw new Error(errorMessage);
-      // }
+      if (!response.ok) {
+        // Handle specific API errors (e.g., invalid credentials)
+        const errorMessage =
+          result?.detail || // Common key for DRF errors
+          result?.error || // Generic error key
+          `Login failed (Status: ${response.status})`;
+        throw new Error(errorMessage);
+      }
 
-      // if (result.access) {
-      //   // Use the login function from AuthContext
-      //   login(result.access);
-      //   console.log('User logged in via component!');
-      //   navigate('/'); // Navigate to home page on successful login
-      // } else {
-      //   // Handle cases where tokens are missing in a 2xx response (unexpected)
-      //   throw new Error('Login successful, but tokens were not received.');
-      // }
-
-    // ------------------------ Testing --------------------------------------
-    login('ajfdklajfdlska')
-    navigate('/'); // Navigate to home page on successful login
-
+      if (result.access) {
+        // Use the login function from AuthContext
+        login(result.access);
+        console.log('User logged in via component!');
+        navigate('/'); // Navigate to home page on successful login
+      } else {
+        // Handle cases where tokens are missing in a 2xx response (unexpected)
+        throw new Error('Login successful, but tokens were not received.');
+      }
     } catch (error: any) {
       console.error('Login Error:', error);
       // Set the error state in the AuthContext (or handle locally if preferred)
