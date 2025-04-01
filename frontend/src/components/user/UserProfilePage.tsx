@@ -58,7 +58,7 @@ const UserProfilePage: React.FC = () => {
             setLoading(true);
             setError(null);
             try {
-                const data = await fetchUserProfileData(userId);
+                const data = await fetchUserProfileData(localStorage.getItem('access_token') || "", userId);
                 setUserData(data);
             } catch (err) {
                 setError(
@@ -166,32 +166,32 @@ const UserProfilePage: React.FC = () => {
                                     {/* Fallback Initials */}
                                     {!userData.avatarUrl && `${userData.firstName[0]}${userData.lastName[0]}`}
                                 </Avatar>
-                                <Typography variant="h5" gutterBottom>
+                                {/* <Typography variant="h5" gutterBottom>
                                     {userData.firstName} {userData.lastName}
                                 </Typography>
                                 {userData.username && (
                                     <Typography color="text.secondary" gutterBottom>
                                         @{userData.username}
                                     </Typography>
-                                )}
+                                )} */}
                                 <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
                                     <Email fontSize="small" sx={{ mr: 1 }} color="action" />
                                     <Typography variant="body2">{userData.email}</Typography>
                                 </Box>
-                                <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                                {/* <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
                                     <CalendarToday fontSize="small" sx={{ mr: 1 }} color="action" />
                                     <Typography variant="body2">
                                         Joined: {formatDate(userData.joinDate)}
                                     </Typography>
-                                </Box>
-                                <Button
+                                </Box> */}
+                                {/* <Button
                                     variant="outlined"
                                     startIcon={<Edit />}
                                     sx={{ mt: 3 }}
                                     onClick={() => alert('Navigate to Edit Profile page')} // Replace with actual navigation
                                 >
                                     Edit Profile
-                                </Button>
+                                </Button> */}
                             </Paper>
                         </Grid>
 

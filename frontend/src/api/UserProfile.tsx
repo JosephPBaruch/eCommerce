@@ -1,15 +1,41 @@
 import { UserProfileData, PublicUserProfileData } from '../types/userProfile';
 import { UserListingSummary } from '../types/listing';
 
-export const fetchUserProfileData = async (userId: string): Promise<UserProfileData> => {
+export const fetchUserProfileData = async (accessToken: string, userId: string): Promise<UserProfileData> => {
   console.log(`Fetching data for user: ${userId}`);
 
   // Return mock data - INCLUDING recentListings
+
+  let userEmail = "";
+
+  try {
+    const response = await fetch(`http://127.0.0.1:8080/users/user-info/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        // return null; // Listing not found
+      }
+      throw new Error(`Failed to fetch listing details: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    userEmail = data.username;
+  } catch (error) {
+    console.error('Error fetching listing details:', error);
+    throw error;
+  }
+
   return {
     id: userId,
     firstName: 'Jane',
     lastName: 'Doe',
-    email: 'jane.doe@example.com',
+    email: userEmail,
     username: 'janedoe99',
     avatarUrl: '/path/to/avatar.jpg',
     joinDate: new Date(Date.now() - 1000 * 60 * 60 * 24 * 180).toISOString(),
