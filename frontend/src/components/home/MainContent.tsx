@@ -191,7 +191,6 @@ return (
       <Typography variant="h1" gutterBottom>
         Store
       </Typography>
-      <Typography>Checkout the latest listings</Typography>
     </div>
 
     {/* Search Bar/Product Filters */}
@@ -269,7 +268,7 @@ return (
                   />
                   <StyledCardContent>
                     <StyledTypography gutterBottom variant="h6" as="div">
-                      {listing.title}
+                      {listing.description}
                     </StyledTypography>
                     <Typography variant="body1" color="primary" fontWeight="bold">
                       {formatCurrency(listing.price)}
