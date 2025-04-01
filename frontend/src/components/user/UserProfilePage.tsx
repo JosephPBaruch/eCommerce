@@ -73,54 +73,54 @@ const UserProfilePage: React.FC = () => {
         loadData();
     }, [userId]); // Re-fetch if userId changes (though likely stable for a profile page)
 
-    const formatDate = (dateString: string): string => {
-        return new Date(dateString).toLocaleDateString(undefined, {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
-    };
+    // const formatDate = (dateString: string): string => {
+    //     return new Date(dateString).toLocaleDateString(undefined, {
+    //         year: 'numeric',
+    //         month: 'long',
+    //         day: 'numeric',
+    //     });
+    // };
 
-    const formatShortDate = (dateString: string): string => {
-        return new Date(dateString).toLocaleDateString(undefined, {
-          month: 'short',
-          day: 'numeric',
-        });
-      };
+    // const formatShortDate = (dateString: string): string => {
+    //     return new Date(dateString).toLocaleDateString(undefined, {
+    //       month: 'short',
+    //       day: 'numeric',
+    //     });
+    //   };
 
-    const formatCurrency = (amount: number): string => {
-        return new Intl.NumberFormat(undefined, {
-            style: 'currency',
-            currency: 'USD', // Adjust currency as needed
-        }).format(amount);
-    };
+    // const formatCurrency = (amount: number): string => {
+    //     return new Intl.NumberFormat(undefined, {
+    //         style: 'currency',
+    //         currency: 'USD', // Adjust currency as needed
+    //     }).format(amount);
+    // };
 
-    // Combined function for status chip colors
-    const getStatusChipColor = (
-        status: OrderSummary['status'] | UserListingSummary['status'],
-    ):
-        | 'default'
-        | 'primary'
-        | 'secondary'
-        | 'error'
-        | 'info'
-        | 'success'
-        | 'warning' => {
-        switch (status) {
-            // Order Statuses
-            case 'Delivered': return 'success';
-            case 'Shipped': return 'info';
-            case 'Processing': return 'warning';
-            case 'Pending': return 'secondary';
-            case 'Cancelled': return 'error';
-            // Listing Statuses
-            case 'Active': return 'success';
-            case 'Sold': return 'secondary';
-            case 'Inactive': return 'default';
-            case 'Draft': return 'warning';
-            default: return 'default';
-        }
-    };
+    // // Combined function for status chip colors
+    // const getStatusChipColor = (
+    //     status: OrderSummary['status'] | UserListingSummary['status'],
+    // ):
+    //     | 'default'
+    //     | 'primary'
+    //     | 'secondary'
+    //     | 'error'
+    //     | 'info'
+    //     | 'success'
+    //     | 'warning' => {
+    //     switch (status) {
+    //         // Order Statuses
+    //         case 'Delivered': return 'success';
+    //         case 'Shipped': return 'info';
+    //         case 'Processing': return 'warning';
+    //         case 'Pending': return 'secondary';
+    //         case 'Cancelled': return 'error';
+    //         // Listing Statuses
+    //         case 'Active': return 'success';
+    //         case 'Sold': return 'secondary';
+    //         case 'Inactive': return 'default';
+    //         case 'Draft': return 'warning';
+    //         default: return 'default';
+    //     }
+    // };
     if (loading) {
         return (
             <Container sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
@@ -178,6 +178,30 @@ const UserProfilePage: React.FC = () => {
                                     <Email fontSize="small" sx={{ mr: 1 }} color="action" />
                                     <Typography variant="body2">{userData.email}</Typography>
                                 </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
+                                    <Button
+                                        size="small"
+                                        onClick={() => navigate('/profile/orders')} // Navigate to full listings page
+                                    >
+                                        View All Orders
+                                    </Button>
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
+                                    <Button
+                                        size="small"
+                                        onClick={() => navigate('profile/addresses')} // Navigate to full listings page
+                                    >
+                                       View Addresses
+                                    </Button>
+                                </Box>
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
+                                    <Button
+                                        size="small"
+                                        onClick={() => navigate('/profile/listings')} // Navigate to full listings page
+                                    >
+                                        View All Listings
+                                    </Button>
+                                </Box>
                                 {/* <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
                                     <CalendarToday fontSize="small" sx={{ mr: 1 }} color="action" />
                                     <Typography variant="body2">
@@ -196,9 +220,9 @@ const UserProfilePage: React.FC = () => {
                         </Grid>
 
                         {/* Main Content Section */}
-                        <Grid item xs={12} md={8}>
+                        {/* <Grid item xs={12} md={8}> */}
                             {/* Recent Orders Section */}
-                            <Paper sx={{ p: 2, mb: 3 }}>
+                            {/* <Paper sx={{ p: 2, mb: 3 }}>
                                 <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
                                     <ShoppingBag sx={{ mr: 1 }} /> Recent Orders
                                 </Typography>
@@ -231,9 +255,9 @@ const UserProfilePage: React.FC = () => {
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
                                     <NavLink to='/profile/orders' end>View All Orders</NavLink>
                                 </Box>
-                            </Paper>
+                            </Paper> */}
                             {/* Listings Section */}
-                            <Paper sx={{ p: 2, mb: 3 }}>
+                            {/* <Paper sx={{ p: 2, mb: 3 }}>
                                 <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
                                     <StorefrontIcon sx={{ mr: 1 }} /> Your Listings
                                 </Typography>
@@ -269,10 +293,10 @@ const UserProfilePage: React.FC = () => {
                                                             {' - '} Listed: {formatShortDate(listing.dateListed)}
                                                         </>
                                                     }
-                                                />
+                                                /> */}
                                                 {/* Optional: Add a small view/edit button here if needed */}
                                                 {/* <ListItemSecondaryAction>...</ListItemSecondaryAction> */}
-                                            </ListItem>
+                                            {/* </ListItem>
                                         ))}
                                     </List>
                                 ) : (
@@ -289,11 +313,11 @@ const UserProfilePage: React.FC = () => {
                                         View All Listings
                                     </Button>
                                 </Box>
-                            </Paper>
+                            </Paper> */}
                             {/* Listings Section */}
 
                             {/* Addresses Section */}
-                            <Paper sx={{ p: 2, mb: 3 }}>
+                            {/* <Paper sx={{ p: 2, mb: 3 }}>
                                 <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
                                     <LocationOn sx={{ mr: 1 }} /> Saved Addresses
                                 </Typography>
@@ -329,10 +353,10 @@ const UserProfilePage: React.FC = () => {
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
                                     <NavLink to='/profile/addresses' end>Manage Addresses</NavLink>
                                 </Box>
-                            </Paper>
+                            </Paper> */}
 
                             {/* Settings Section (Example) */}
-                            <Paper sx={{ p: 2 }}>
+                            {/* <Paper sx={{ p: 2 }}>
                                 <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
                                     <Settings sx={{ mr: 1 }} /> Account Settings
                                 </Typography>
@@ -342,8 +366,8 @@ const UserProfilePage: React.FC = () => {
                                         <ListItemText primary="Change Password" />
                                     </ListItemButton>
                                 </List>
-                            </Paper>
-                        </Grid>
+                            </Paper> */}
+                        {/* </Grid> */}
                     </Grid>
                 </Container>
                 <Footer />
