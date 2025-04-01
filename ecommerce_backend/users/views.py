@@ -3,6 +3,8 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from .serializers import LoginSerializer, RegisterSerializer
 
 logger = logging.getLogger(__name__)
@@ -24,6 +26,14 @@ class LoginView(generics.GenericAPIView):
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token),
+        })
+
+class UserInfoView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        return Response({
+            'username': request.user.username
         })
     
 # TODO: Logout view and logic
