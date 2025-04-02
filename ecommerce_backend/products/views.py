@@ -4,6 +4,9 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.views import APIView
+from rest_framework import status
+from django.shortcuts import get_object_or_404
 from .models import Product
 from .serializers import ProductSerializer
 
@@ -42,3 +45,12 @@ class UserProductViewSet(ListModelMixin, GenericViewSet):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+class DeleteProductView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def delete(self, request, pk, *args, **kwargs):
+        product = get_object_or_404(Product, pk=pk, user=request.user)
+        product.delete()
+        return Response({"detail": "Product deleted successfully."}, status=status.HTTP_204_NO_CONTENT)

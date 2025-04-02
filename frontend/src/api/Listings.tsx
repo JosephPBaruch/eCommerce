@@ -124,14 +124,24 @@ export const deleteListingApi = async (
     accessToken: string | null
 ): Promise<void> => {
     console.log(`Deleting listing ${listingId}`);
-    // Add Authorization header if needed: headers: { 'Authorization': `Bearer ${accessToken}` }
-    await new Promise(resolve => setTimeout(resolve, 600));
-    const initialLength = mockUserListings.length;
-    mockUserListings = mockUserListings.filter(l => l.id !== listingId);
-    if (mockUserListings.length === initialLength) {
-        // throw new Error("Listing not found for deletion"); // Simulate error
+
+    try {
+        const response = await fetch(`http://127.0.0.1:8080/products/${listingId}/delete/`, {
+            method: "DELETE",
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to delete listing: ${response.statusText}`);
+        }
+
+        console.log(`Listing ${listingId} deleted successfully.`);
+    } catch (error) {
+        console.error('Error deleting listing:', error);
+        throw error;
     }
-    // No return needed for successful delete
 };
 
 export const fetchListingDetails = async (accessToken: string, listingId: string): Promise<ListingDetails | null> => {
