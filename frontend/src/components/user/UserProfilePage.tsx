@@ -186,14 +186,14 @@ const UserProfilePage: React.FC = () => {
                                         View All Orders
                                     </Button>
                                 </Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
+                                {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
                                     <Button
                                         size="small"
                                         onClick={() => navigate('profile/addresses')} // Navigate to full listings page
                                     >
                                        View Addresses
                                     </Button>
-                                </Box>
+                                </Box> */}
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
                                     <Button
                                         size="small"

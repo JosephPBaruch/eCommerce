@@ -29,3 +29,16 @@ class ProductListingViewSet(ListModelMixin, GenericViewSet):
     def list(self, request, *args, **kwargs):
         products = self.queryset.values('id', 'image', 'description', 'price')
         return Response(products)
+
+class UserProductViewSet(ListModelMixin, GenericViewSet):
+    serializer_class = ProductSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def get_queryset(self):
+        return Product.objects.filter(user=self.request.user)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

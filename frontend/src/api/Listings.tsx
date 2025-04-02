@@ -78,18 +78,45 @@ export const fetchUserListings = async (
   // Add Authorization header if needed: headers: { 'Authorization': `Bearer ${accessToken}` }
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
+  // http://127.0.0.1:8080/products/user-products/
+
   // Simulate pagination
   const totalListings = mockUserListings.length;
   const totalPages = Math.ceil(totalListings / limit);
-  const startIndex = (page - 1) * limit;
-  const paginatedListings = mockUserListings.slice(startIndex, startIndex + limit);
+  // const startIndex = (page - 1) * limit;
+  // const paginatedListings = mockUserListings.slice(startIndex, startIndex + limit);
 
-  return {
-    listings: paginatedListings,
-    currentPage: page,
-    totalPages: totalPages,
-    totalCount: totalListings,
-  };
+
+  try {
+    const response = await fetch("http://127.0.0.1:8080/products/user-products/", {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        // return null; // Listing not found
+      }
+      throw new Error(`Failed to fetch listing details: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    return {
+      listings: data,
+      currentPage: page,
+      totalPages: totalPages,
+      totalCount: totalListings,
+    };
+  } catch (error) {
+    console.error('Error fetching listing details:', error);
+    throw error;
+  }
+
+
+
 };
 
 export const deleteListingApi = async (
