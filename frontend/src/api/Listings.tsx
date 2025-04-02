@@ -151,7 +151,7 @@ export const fetchListingDetails = async (accessToken: string, listingId: string
     const response = await fetch(`http://127.0.0.1:8080/products/${listingId}/`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
       },
     });
 

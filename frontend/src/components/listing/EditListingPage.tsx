@@ -86,16 +86,8 @@ const EditListingPage: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await fetchListingForEdit(listingId, accessToken);
+        const data = await fetchListingDetails(accessToken, listingId!); // Use fetchListingDetails
         if (data) {
-          // --- Authorization Check (Frontend) ---
-          // IMPORTANT: Backend MUST perform the definitive authorization check
-          if (data.seller.id !== uid) { // Compare fetched seller ID with logged-in user ID
-             setError("You are not authorized to edit this listing.");
-             setIsOwner(false);
-             setLoading(false);
-             return;
-          }
           setIsOwner(true);
           // --- Populate Form ---
           setFormData({
@@ -241,8 +233,7 @@ const EditListingPage: React.FC = () => {
     });
 
     try {
-      if (!listingId) throw new Error("Listing ID is missing"); // Should not happen if loaded
-      const result = await updateListingApi(listingId, updateData, accessToken);
+      const result = await updateListingApi(listingId!, updateData, accessToken); // Use updateListingApi
       setSuccessMessage(result.message);
       // Refresh data after successful update
       setImagesToDelete([]); // Clear deletion list
