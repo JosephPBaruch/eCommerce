@@ -27,6 +27,15 @@ export interface ListingFormData {
     images: File[] | undefined;
 }
 
+export type CreateType =  {
+    name: string;
+    description: string;
+    price: string;
+    images: File[] | undefined;
+    type: string;
+    brand: string;
+}
+
 export interface Category {
     id: string;
     name: string;

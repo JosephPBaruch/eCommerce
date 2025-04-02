@@ -122,7 +122,6 @@ export default function MainContent() {
         //   fetchCategories() // Assuming you have this API call
         // ]);
         const listingsData = await fetchActiveListings();
-        console.log(listingsData)
         setAllListings(listingsData);
         // setCategoriesData(categoriesData); // If fetching categories
       } catch (err) {

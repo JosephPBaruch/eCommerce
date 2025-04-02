@@ -22,16 +22,14 @@ import {
     Cancel as CancelIcon,
     Sell as SellIcon, // Icon for the page title
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
 
 // Import shared components
 import CssBaseline from '@mui/material/CssBaseline';
 import AppTheme from '../../theme/AppTheme';
 import AppAppBar from '../shared/AppAppBar';
 import Footer from '../shared/Footer';
-import { useAuth } from '../../context/AuthContext';
 import { submitListingApi } from '../../api/Listings';
-import { ListingFormData, Category, Condition} from '../../types/listing';
+import { ListingFormData, Category, Condition, CreateType} from '../../types/listing';
 
 // Mock API data
 const categories: Category[] = [
@@ -66,6 +64,7 @@ const SellItemPage: React.FC = () => {
         price: '',
         quantity: '1', // Default quantity to 1
         brand: '',
+        images: [] as File[],
     });
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -87,35 +86,25 @@ const SellItemPage: React.FC = () => {
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         setError(null); // Clear error on new file selection
-        if (event.target.files) {
-            const filesArray = Array.from(event.target.files);
-            // Basic validation (e.g., limit number of files)
-            const maxFiles = 5;
-            if (selectedFiles.length + filesArray.length > maxFiles) {
-                setError(`You can upload a maximum of ${maxFiles} images.`);
-                return;
-            }
+        if (event.target.files && event.target.files.length > 0) {
+            const file = event.target.files[0]; // Only take the first file
+            setSelectedFiles([file]); // Replace the array with the single file
 
-            setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]);
-
-            // Generate previews
-            filesArray.forEach((file) => {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    setImagePreviews((prevPreviews) => [...prevPreviews, reader.result as string]);
-                };
-                reader.readAsDataURL(file);
-            });
+            // Generate preview
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreviews([reader.result as string]); // Replace previews with the single file preview
+            };
+            reader.readAsDataURL(file);
         }
-        // Reset file input value so the same file can be selected again if removed
         if (fileInputRef.current) {
-            fileInputRef.current.value = "";
+            fileInputRef.current.value = ""; // Reset file input value
         }
     };
 
-    const handleRemoveImage = (indexToRemove: number) => {
-        setSelectedFiles((prevFiles) => prevFiles.filter((_, index) => index !== indexToRemove));
-        setImagePreviews((prevPreviews) => prevPreviews.filter((_, index) => index !== indexToRemove));
+    const handleRemoveImage = () => {
+        setSelectedFiles([]); // Clear the selected file
+        setImagePreviews([]); // Clear the preview
     };
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -136,22 +125,23 @@ const SellItemPage: React.FC = () => {
             return;
         }
 
-        // Prepare the request body
-        const requestBody = {
+        // Prepare the request body using FormData
+        const requestBody: CreateType = {
             name: formData.title,
             description: formData.description,
-            price: parseFloat(formData.price),
-            image: null, // Use the first image or null
+            price: formData.price,
+            images: formData.images,
             type: formData.category,
-            brand: formData.brand || null,
-        };
+            brand: formData.brand
+        } 
 
         try {
+            console.log(formData)
             const result = await submitListingApi(requestBody, localStorage.getItem('access_token'));
             setSuccessMessage(result.message);
             // Optionally clear form or navigate away
             setFormData({
-                title: '', description: '', category: '', condition: '', price: '', quantity: '1', brand: '',
+                title: '', description: '', category: '', condition: '', price: '', quantity: '1', brand: '', images: []
             });
             setSelectedFiles([]);
             setImagePreviews([]);
@@ -310,13 +300,12 @@ const SellItemPage: React.FC = () => {
 
                                 {/* Image Upload */}
                                 <Grid item xs={12}>
-                                    <Typography variant="subtitle1" gutterBottom>Images (Required, max 5)</Typography>
+                                    <Typography variant="subtitle1" gutterBottom>Image (Required)</Typography>
                                     {/* Hidden file input */}
                                     <input
                                         ref={fileInputRef}
                                         type="file"
-                                        multiple
-                                        accept="image/*" // Accept only image files
+                                        accept="image/*"
                                         onChange={handleFileChange}
                                         style={{ display: 'none' }}
                                         id="image-upload-input"
@@ -328,10 +317,10 @@ const SellItemPage: React.FC = () => {
                                             variant="outlined"
                                             component="span" // Makes the button act like a label trigger
                                             startIcon={<AddPhotoAlternateIcon />}
-                                            disabled={isSubmitting || selectedFiles.length >= 5}
+                                            disabled={isSubmitting || selectedFiles.length >= 1}
                                             sx={{ mb: 2 }}
                                         >
-                                            Add Images
+                                            Add Image
                                         </Button>
                                     </label>
 
@@ -342,12 +331,12 @@ const SellItemPage: React.FC = () => {
                                                 <Avatar
                                                     variant="rounded"
                                                     src={previewUrl}
-                                                    alt={`Preview ${index + 1}`}
+                                                    alt={`Preview`}
                                                     sx={{ width: 100, height: 100 }}
                                                 />
                                                 <IconButton
                                                     size="small"
-                                                    onClick={() => handleRemoveImage(index)}
+                                                    onClick={handleRemoveImage}
                                                     disabled={isSubmitting}
                                                     sx={{
                                                         position: 'absolute',

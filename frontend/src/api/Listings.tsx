@@ -1,9 +1,9 @@
-import { UserListingSummary, ListingsResponse, ListingCardData } from '../types/listing'; // Adjust path
+import { UserListingSummary, ListingsResponse, ListingCardData, CreateType } from '../types/listing'; // Adjust path
 import { Category, Condition, ListingDetails, ListingImageData, SellerInfo  } from '../types/listing';
 
 
 export const submitListingApi = async (
-  listingData: globalThis.FormData,
+  listingData: CreateType,
   accessToken: string | null,
 ): Promise<{ success: boolean; message: string; listingId?: string }> => {
   const response = await fetch('http://127.0.0.1:8080/products/', {
