@@ -90,6 +90,12 @@ const SellItemPage: React.FC = () => {
             const file = event.target.files[0]; // Only take the first file
             setSelectedFiles([file]); // Replace the array with the single file
 
+            // Update formData.images
+            setFormData((prevData) => ({
+                ...prevData,
+                images: [file],
+            }));
+
             // Generate preview
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -114,8 +120,8 @@ const SellItemPage: React.FC = () => {
         setSuccessMessage(null);
 
         // Basic validation check
-        if (!formData.title || !formData.category || !formData.price) {
-            setError("Please fill in all required fields.");
+        if (!formData.title || !formData.category || !formData.price || formData.images.length === 0) {
+            setError("Please fill in all required fields and upload an image.");
             setIsSubmitting(false);
             return;
         }
@@ -136,7 +142,7 @@ const SellItemPage: React.FC = () => {
         } 
 
         try {
-            console.log(formData)
+            console.log(formData);
             const result = await submitListingApi(requestBody, localStorage.getItem('access_token'));
             setSuccessMessage(result.message);
             // Optionally clear form or navigate away
