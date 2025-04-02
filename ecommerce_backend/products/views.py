@@ -54,3 +54,17 @@ class DeleteProductView(APIView):
         product = get_object_or_404(Product, pk=pk, user=request.user)
         product.delete()
         return Response({"detail": "Product deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
+class ProductEditView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def patch(self, request, pk, *args, **kwargs):
+        product = get_object_or_404(Product, pk=pk, user=request.user)
+        editable_fields = ['name', 'description', 'price', 'image', 'type', 'brand']
+        data = {key: value for key, value in request.data.items() if key in editable_fields}
+        for field, value in data.items():
+            setattr(product, field, value)
+        product.save()
+        serializer = ProductSerializer(product)
+        return Response(serializer.data, status=status.HTTP_200_OK)

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ProductViewSet, ProductListingViewSet, UserProductViewSet, DeleteProductView
+from .views import ProductViewSet, ProductListingViewSet, UserProductViewSet, DeleteProductView, ProductEditView
 
 urlpatterns = [
     path('', ProductViewSet.as_view({'get': 'list', 'post': 'create'}), name='product-list'),
@@ -7,4 +7,5 @@ urlpatterns = [
     path('listing/', ProductListingViewSet.as_view({'get': 'list'}), name='product-listing'),
     path('user-products/', UserProductViewSet.as_view({'get': 'list'}), name='user-product-list'),
     path('<uuid:pk>/delete/', DeleteProductView.as_view(), name='product-delete'),
+    path('<uuid:pk>/edit/', ProductEditView.as_view(), name='product-edit'),
 ]
