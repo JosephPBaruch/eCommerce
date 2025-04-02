@@ -21,9 +21,10 @@ export interface ListingFormData {
     description: string;
     category: string;
     condition: string;
-    price: string; // Keep as string for input, convert on submit
-    quantity: string; // Keep as string for input, convert on submit
-    brand?: string; // Optional
+    price: string;
+    quantity: string;
+    brand: string;
+    images: File[] | undefined;
 }
 
 export interface Category {

@@ -6,9 +6,6 @@ export const submitListingApi = async (
   listingData: globalThis.FormData,
   accessToken: string | null,
 ): Promise<{ success: boolean; message: string; listingId?: string }> => {
-  console.log('Submitting listing...');
-
-  console.log(listingData)
   const response = await fetch('http://127.0.0.1:8080/products/', {
     method: 'POST',
     headers: {

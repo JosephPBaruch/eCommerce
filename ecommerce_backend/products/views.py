@@ -12,6 +12,8 @@ from .serializers import ProductSerializer
 
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
     def get_permissions(self):
         if self.action == 'create':

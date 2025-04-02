@@ -121,7 +121,8 @@ export default function MainContent() {
         //   fetchActiveListings(),
         //   fetchCategories() // Assuming you have this API call
         // ]);
-        const listingsData = await fetchActiveListings(localStorage.getItem('access_token'));
+        const listingsData = await fetchActiveListings();
+        console.log(listingsData)
         setAllListings(listingsData);
         // setCategoriesData(categoriesData); // If fetching categories
       } catch (err) {
