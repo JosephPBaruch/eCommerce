@@ -2,47 +2,6 @@ import { UserListingSummary, ListingsResponse, ListingCardData } from '../types/
 import { Category, Condition, ListingDetails, ListingImageData, SellerInfo  } from '../types/listing';
 
 
-let mockUserListings: UserListingSummary[] = [
-  // Initial mock data for the logged-in user
-  {
-    id: 'listing101',
-    title: 'Stylish Wireless Headphones (Used - Like New)',
-    price: 65.0,
-    status: 'Active',
-    dateListed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
-    imageUrl: '/path/to/headphones.jpg', // Replace
-    quantity: 1,
-  },
-  {
-    id: 'listing102',
-    title: 'Vintage Comic Book Collection',
-    price: 150.0,
-    status: 'Sold',
-    dateListed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
-    imageUrl: '/path/to/comics.jpg', // Replace
-  },
-  {
-    id: 'listing103',
-    title: 'Garden Gnome - Slightly Chipped',
-    price: 10.0,
-    status: 'Inactive',
-    dateListed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 90).toISOString(),
-    // No image example
-  },
-   {
-    id: 'listing104',
-    title: 'Brand New Unopened Widget',
-    price: 29.99,
-    status: 'Active',
-    dateListed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString(),
-    imageUrl: '/path/to/widget.jpg', // Replace
-    quantity: 5,
-  },
-];
-let nextListingId = 105; // Example for potential additions/deletions
-
-
-// --- Mock API Function ---
 export const submitListingApi = async (
   listingData: globalThis.FormData,
   accessToken: string | null,
@@ -184,14 +143,11 @@ export const fetchListingDetails = async (accessToken: string, listingId: string
   }
 };
 
-export const fetchActiveListings = async (accessToken: string | null): Promise<ListingCardData[]> => {
+export const fetchActiveListings = async (): Promise<ListingCardData[]> => {
   console.log('Fetching active listings...');
   try {
     const response = await fetch('http://127.0.0.1:8080/products/listing/', {
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-      },
     });
 
     if (!response.ok) {

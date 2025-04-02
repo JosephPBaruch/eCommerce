@@ -12,11 +12,14 @@ from .serializers import ProductSerializer
 
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+
+    def get_permissions(self):
+        if self.action == 'create':
+            return [IsAuthenticated()]
+        return []
 
     def get_queryset(self):
-        return Product.objects.filter(user=self.request.user)
+        return Product.objects.filter()
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
