@@ -66,8 +66,7 @@ const UserListingsPage: React.FC = () => {
             setLoading(true);
             setError(null);
             try {
-                // Pass necessary identifiers (userId might be implicit via token)
-                const response = await fetchUserListings('user123', page, ITEMS_PER_PAGE, accessToken); // Replace 'user123' if needed
+                const response = await fetchUserListings( page, ITEMS_PER_PAGE, localStorage.getItem("access_token"));
                 setListings(response.listings);
                 setTotalPages(response.totalPages);
             } catch (err) {

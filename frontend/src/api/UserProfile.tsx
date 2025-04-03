@@ -80,7 +80,6 @@ export const fetchUserProfileData = async (accessToken: string, userId: string):
   };
 };
 
-
 export const fetchPublicUserProfile = async (username: string): Promise<PublicUserProfileData | null> => {
   console.log(`Fetching public profile for username: ${username}`);
   await new Promise((resolve) => setTimeout(resolve, 1100));

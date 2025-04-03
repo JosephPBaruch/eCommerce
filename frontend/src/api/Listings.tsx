@@ -25,29 +25,22 @@ export const submitListingApi = async (
 };
 
 export const fetchUserListings = async (
-  userId: string, // User ID from auth context would be used here
   page: number,
   limit: number,
   accessToken: string | null,
 ): Promise<ListingsResponse> => {
-  console.log(`Fetching listings for user: ${userId}, page: ${page}, limit: ${limit}`);
-  // Add Authorization header if needed: headers: { 'Authorization': `Bearer ${accessToken}` }
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  // http://127.0.0.1:8080/products/user-products/
-
-  // Simulate pagination
-  const totalListings = mockUserListings.length;
-  const totalPages = Math.ceil(totalListings / limit);
-  // const startIndex = (page - 1) * limit;
-  // const paginatedListings = mockUserListings.slice(startIndex, startIndex + limit);
-
-
+  // const totalListings = mockUserListings.length;
+  // const totalPages = Math.ceil(totalListings / limit);
+  console.log("hello")
+  console.log(accessToken)
   try {
+console.log(accessToken)
     const response = await fetch("http://127.0.0.1:8080/products/user-products/", {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
     });
 
@@ -63,16 +56,13 @@ export const fetchUserListings = async (
     return {
       listings: data,
       currentPage: page,
-      totalPages: totalPages,
-      totalCount: totalListings,
+      totalPages: 3,
+      totalCount: 5,
     };
   } catch (error) {
     console.error('Error fetching listing details:', error);
     throw error;
   }
-
-
-
 };
 
 export const deleteListingApi = async (
