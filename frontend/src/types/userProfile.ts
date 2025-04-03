@@ -2,17 +2,7 @@
 import { UserListingSummary } from './listing';
 
 export interface UserProfileData {
-  id: string;
-  firstName: string;
-  lastName: string;
   email: string;
-  username?: string;
-  avatarUrl?: string;
-  joinDate: string;
-  recentOrders: OrderSummary[];
-  addresses: Address[];
-  recentListings: UserListingSummary[]; // <-- Add this field
-  // Add other relevant fields
 }
 
 export interface OrderSummary {
@@ -34,18 +24,18 @@ export interface Address {
     isDefaultBilling?: boolean;
 }
 
-export interface UserProfileData {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    username?: string; // Optional
-    avatarUrl?: string; // Optional
-    joinDate: string; // ISO date string ideally
-    recentOrders: OrderSummary[];
-    addresses: Address[];
+// export interface UserProfileData {
+//     id: string;
+//     firstName: string;
+//     lastName: string;
+//     email: string;
+//     username?: string; // Optional
+//     avatarUrl?: string; // Optional
+//     joinDate: string; // ISO date string ideally
+//     recentOrders: OrderSummary[];
+//     addresses: Address[];
 
-}
+// }
 
 export interface PublicUserProfileData {
   id: string; // User's ID
