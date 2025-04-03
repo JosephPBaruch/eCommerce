@@ -120,8 +120,8 @@ const SellItemPage: React.FC = () => {
         setSuccessMessage(null);
 
         // Basic validation check
-        if (!formData.title || !formData.category || !formData.price || formData.images.length === 0) {
-            setError("Please fill in all required fields and upload an image.");
+        if (!formData.title || !formData.category || !formData.price) { // Removed image requirement
+            setError("Please fill in all required fields.");
             setIsSubmitting(false);
             return;
         }
