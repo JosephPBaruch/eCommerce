@@ -5,6 +5,7 @@ from .models import Order
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializers import OrdersSerializer
+from django.contrib.auth import get_user_model
 
 class OrdersViewSet(viewsets.ModelViewSet):
     serializer_class = OrdersSerializer
@@ -18,6 +19,10 @@ class OrdersViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Order.objects.filter()
+    
+    def perform_create(self, serializer):
+        user = get_user_model().objects.get(username=self.request.user.username)
+        serializer.save(user=user)
 
 class CartOrdersView(APIView):
     permission_classes = [IsAuthenticated]
