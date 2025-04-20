@@ -1,7 +1,9 @@
 import uuid
 from django.db import models
-from users.models import User
+from django.contrib.auth import get_user_model
 from products.models import Product
+
+User = get_user_model()
 
 class Order(models.Model):
     STATUS_CHOICES = [
