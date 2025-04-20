@@ -33,9 +33,13 @@ const UserProfilePage: React.FC = () => {
                 const data = await fetchUserProfileData(localStorage.getItem('access_token') || "");
                 setUserData(data);
             } catch (err) {
-                setError(
-                    err instanceof Error ? err.message : 'An unknown error occurred',
-                );
+                if (err instanceof Error && err.message === 'Unauthorized') {
+                    navigate('/signin'); // Navigate to sign-in page if unauthorized
+                } else {
+                    setError(
+                        err instanceof Error ? err.message : 'An unknown error occurred',
+                    );
+                }
                 console.error('Error fetching user profile:', err);
             } finally {
                 setLoading(false);
@@ -43,7 +47,7 @@ const UserProfilePage: React.FC = () => {
         };
 
         loadData();
-    }, []);
+    }, [navigate]);
 
     if (loading) {
         return (

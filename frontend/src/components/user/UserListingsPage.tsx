@@ -70,7 +70,11 @@ const UserListingsPage: React.FC = () => {
                 setListings(response.listings);
                 setTotalPages(response.totalPages);
             } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to load listings.');
+                if (err instanceof Error && err.message === 'Unauthorized') {
+                    navigate('/signin'); // Redirect to sign-in page
+                } else {
+                    setError(err instanceof Error ? err.message : 'Failed to load listings.');
+                }
                 console.error('Error fetching listings:', err);
                 setListings([]);
                 setTotalPages(0);
@@ -113,16 +117,15 @@ const UserListingsPage: React.FC = () => {
         setError(null);
         try {
             await deleteListingApi(listingToDelete.id, accessToken);
-            // Remove from local state & potentially refetch or adjust pagination
             setListings(prev => prev.filter(l => l.id !== listingToDelete.id));
-            // TODO: Add logic here to refetch the current page or adjust totalPages
-            // if the deletion makes the current page empty on a page > 1.
-            // For simplicity now, just remove locally. A refetch might be safer.
             handleCloseConfirmDialog();
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to delete listing.');
+            if (err instanceof Error && err.message === 'Unauthorized') {
+                navigate('/signin'); // Redirect to sign-in page
+            } else {
+                setError(err instanceof Error ? err.message : 'Failed to delete listing.');
+            }
             console.error('Error deleting listing:', err);
-            // Keep dialog open on error? Optional.
         } finally {
             setIsDeleting(false);
         }
