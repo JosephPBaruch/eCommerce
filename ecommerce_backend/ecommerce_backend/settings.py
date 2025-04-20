@@ -118,7 +118,7 @@ SWAGGER_SETTINGS = {
             'type': 'apiKey',
             'name': 'Authorization',
             'in': 'header',
-            'description': 'Enter "Authorization: Bearer <your_token>" to authenticate.',
+            'description': "Enter 'Bearer <your_token>' to authenticate.",
         }
     }
 }

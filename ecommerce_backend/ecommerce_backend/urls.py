@@ -11,6 +11,12 @@ schema_view = get_schema_view(
    openapi.Info(
       title="eCommerce Backend API",
       default_version='v1',
+      description="AUTHENTICATION INSTRUCTIONS: \n" \
+      "To authenticate the swagger UI playground: \n\n" \
+      "    1. use the /login and/or /register endpoint to obtain the access token\n" \
+      "    2. copy the access key\n" \
+      "    3. navigate to the swagger ui 'Authenticate' button and type, 'Bearer <paste access token here>'.\n\n" \
+      "After, all other requests requiring authentication can be made."
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
