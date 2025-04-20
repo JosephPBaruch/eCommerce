@@ -10,7 +10,7 @@ class OrdersViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
 
     def get_permissions(self):
-        if self.action == 'create':
+        if self.action in ['create', 'update', 'destroy']:
             return [IsAuthenticated()]
         return []
 
