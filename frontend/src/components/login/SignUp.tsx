@@ -14,7 +14,8 @@ import Typography from '@mui/material/Typography';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import AppTheme from '../../theme/AppTheme';
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from '../shared/icons';
+// import { GoogleIcon, FacebookIcon, SitemarkIcon } from '../shared/icons';
+import { SitemarkIcon } from '../shared/icons';
 import { useNavigate } from 'react-router-dom';
 // import { ThemedContainer } from '../../theme/themePrimitives';
 import AppAppBar from '../shared/AppAppBar';
@@ -96,28 +97,28 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     };
 
     // Update to actual api call later
-    navigate("/signin")
-  //   try {
-  //     const response = await fetch('http://127.0.0.1:8080/users/register/', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(userData),
-  //     });
+    // navigate("/signin")
+    try {
+      const response = await fetch('http://127.0.0.1:8080/users/register/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
 
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok');
-  //     }
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
 
-  //     const result = await response.json();
-  //     console.log('Success:', result);
-  //     navigate("/signin")
-  //     // Handle successful registration (e.g., redirect to login page)
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //     // Handle registration error
-  //   }
+      const result = await response.json();
+      console.log('Success:', result);
+      navigate("/signin")
+      // Handle successful registration (e.g., redirect to login page)
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle registration error
+    }
   };
 
   return (
@@ -201,7 +202,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
             <Typography sx={{ color: 'text.secondary' }}>or</Typography>
           </Divider>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Button
+            {/* <Button
               fullWidth
               variant="outlined"
               onClick={() => alert('Sign up with Google')}
@@ -216,7 +217,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
               startIcon={<FacebookIcon />}
             >
               Sign up with Facebook
-            </Button>
+            </Button> */}
             <Typography sx={{ textAlign: 'center' }}>
               Already have an account?{' '}
               <Link

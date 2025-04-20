@@ -47,14 +47,13 @@ INSTALLED_APPS = [
     'products',
     'orders',
     'corsheaders',
+    'drf_yasg',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
     ),
 }
 
@@ -149,3 +148,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # ]
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'Enter "Bearer <your_token>"',
+        }
+    } 
+}

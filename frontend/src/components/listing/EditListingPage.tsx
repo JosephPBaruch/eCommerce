@@ -38,87 +38,12 @@ import { useAuth } from '../../context/AuthContext';
 
 // Import types
 import { ListingImageData, ListingEditFormData } from '../../types/listing';
-import { fetchListingForEdit, updateListingApi } from '../../api/Listings';
+import { fetchListingDetails, updateListingApi } from '../../api/Listings';
 
 // --- Mock Data (Categories/Conditions - reuse from SellItemPage or fetch) ---
 const categories = [ { id: 'electronics', name: 'Electronics' }, /* ... other categories */ ];
 const conditions = [ { id: 'new', name: 'New' }, /* ... other conditions */ ];
 const MAX_IMAGES = 5;
-
-// --- Mock API Functions ---
-// Replace with your actual API calls
-
-// // Fetch listing details specifically for editing (might be same as view endpoint)
-// const fetchListingForEdit = async (
-//     listingId: string,
-//     accessToken: string | null
-// ): Promise<ListingDetails | null> => {
-//   console.log(`Fetching listing ${listingId} for editing`);
-//   // Add Authorization header: headers: { 'Authorization': `Bearer ${accessToken}` }
-//   await new Promise((resolve) => setTimeout(resolve, 1000));
-
-//   // Simulate not found or not authorized (backend should check ownership)
-//   if (listingId === 'not-found' || listingId === 'unauthorized') {
-//     return null;
-//   }
-
-//   // Return mock data matching ListingDetails
-//    const mockImages: ListingImageData[] = [
-//     { id: 'img1', url: '/path/to/headphones_large.jpg' }, // Replace
-//     { id: 'img2', url: '/path/to/headphones_side.jpg' }, // Replace
-//   ];
-//   const mockSeller = { id: 'user123', username: 'CurrentUser' }; // Simulate owned by current user
-
-//   return {
-//     id: listingId,
-//     title: 'Editable Wireless Headphones',
-//     description: "Good condition, works perfectly. Selling because I upgraded.",
-//     price: 55.00,
-//     category: { id: 'electronics', name: 'Electronics' },
-//     condition: { id: 'used_good', name: 'Used - Good' },
-//     status: 'Active',
-//     dateListed: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10).toISOString(),
-//     images: mockImages,
-//     quantity: 1,
-//     brand: 'AudioPhile',
-//     seller: mockSeller,
-//   };
-// };
-
-// // Update the listing
-// const updateListingApi = async (
-//   listingId: string,
-//   updateData: globalThis.FormData, // Use FormData for potential file uploads
-//   accessToken: string | null,
-// ): Promise<{ success: boolean; message: string; listingId: string }> => {
-//   console.log(`Updating listing ${listingId}...`);
-//   // Log FormData entries (for debugging)
-//   for (let pair of updateData.entries()) {
-//     console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
-//   }
-//   // Add Authorization header: headers: { 'Authorization': `Bearer ${accessToken}` }
-//   await new Promise((resolve) => setTimeout(resolve, 1500));
-
-//   // --- Replace with actual fetch (likely PUT or PATCH) ---
-//   // const response = await fetch(`/api/listings/${listingId}`, {
-//   //   method: 'PUT', // or 'PATCH'
-//   //   headers: { 'Authorization': `Bearer ${accessToken}` },
-//   //   body: updateData,
-//   // });
-//   // if (!response.ok) { /* Handle error */ }
-//   // const result = await response.json();
-//   // return { success: true, message: 'Listing updated successfully!', listingId: result.id };
-//   // --- End Replace ---
-
-//   // Simulate success/failure
-//   if (Math.random() > 0.1) {
-//     return { success: true, message: 'Listing updated successfully!', listingId: listingId };
-//   } else {
-//     throw new Error('Failed to update listing. Please try again.');
-//   }
-// };
-// --- End Mock API Functions ---
-
 
 const EditListingPage: React.FC = () => {
   const { listingId } = useParams<{ listingId: string }>();
@@ -161,16 +86,8 @@ const EditListingPage: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await fetchListingForEdit(listingId, accessToken);
+        const data = await fetchListingDetails(accessToken, listingId!); // Use fetchListingDetails
         if (data) {
-          // --- Authorization Check (Frontend) ---
-          // IMPORTANT: Backend MUST perform the definitive authorization check
-          if (data.seller.id !== uid) { // Compare fetched seller ID with logged-in user ID
-             setError("You are not authorized to edit this listing.");
-             setIsOwner(false);
-             setLoading(false);
-             return;
-          }
           setIsOwner(true);
           // --- Populate Form ---
           setFormData({
@@ -316,8 +233,7 @@ const EditListingPage: React.FC = () => {
     });
 
     try {
-      if (!listingId) throw new Error("Listing ID is missing"); // Should not happen if loaded
-      const result = await updateListingApi(listingId, updateData, accessToken);
+      const result = await updateListingApi(listingId!, updateData, accessToken); // Use updateListingApi
       setSuccessMessage(result.message);
       // Refresh data after successful update
       setImagesToDelete([]); // Clear deletion list

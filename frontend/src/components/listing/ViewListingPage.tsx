@@ -57,7 +57,7 @@ const ViewListingPage: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await fetchListingDetails(listingId);
+        const data = await fetchListingDetails(localStorage.getItem('access_token') || "hello", listingId);
         if (data) {
           setListingDetails(data);
           setSelectedImageIndex(0); // Reset image index on new load

@@ -191,7 +191,6 @@ return (
       <Typography variant="h1" gutterBottom>
         Store
       </Typography>
-      <Typography>Checkout the latest listings</Typography>
     </div>
 
     {/* Search Bar/Product Filters */}
@@ -264,12 +263,12 @@ return (
                   <CardMedia
                     component="img"
                     alt={listing.title}
-                    image={listing.imageUrl || '/path/to/placeholder.png'}
+                    image={listing.imageUrl || "https://picsum.photos/400/300?random=5"}
                     sx={{ /* ... */ }}
                   />
                   <StyledCardContent>
                     <StyledTypography gutterBottom variant="h6" as="div">
-                      {listing.title}
+                      {listing.description}
                     </StyledTypography>
                     <Typography variant="body1" color="primary" fontWeight="bold">
                       {formatCurrency(listing.price)}
