@@ -26,6 +26,7 @@ urlpatterns = [
    path('users/', include('users.urls')),
    path('products/', include('products.urls')),
    path('orders/', include('orders.urls')),
+   path('cart/', include('cart.urls')),
 
    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
    re_path(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),

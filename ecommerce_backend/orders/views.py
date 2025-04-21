@@ -1,6 +1,5 @@
+from cart.models import Cart
 from rest_framework import viewsets
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from .models import Order
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -18,17 +17,13 @@ class OrdersViewSet(viewsets.ModelViewSet):
         return []
 
     def get_queryset(self):
-        return Order.objects.filter()
+        return Order.objects.filter(user=self.request.user)
     
     def perform_create(self, serializer):
         user = get_user_model().objects.get(username=self.request.user.username)
-        serializer.save(user=user)
-
-class CartOrdersView(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-
-    def get(self, request, *args, **kwargs):
-        cart_orders = Order.objects.filter(user=request.user, status='cart')
-        serializer = OrderSerializer(cart_orders, many=True)
-        return Response(serializer.data)
+        cart_id = self.request.data.get('cart')  # Get cart ID from request
+        cart = Cart.objects.get(id=cart_id)  # Fetch the cart instance
+        order = serializer.save(user=user, cart=cart)  # Link cart to order
+        total_price = sum(item.price * item.quantity for item in cart.items.all())  # Calculate total price from cart items
+        order.total_price = total_price
+        order.save()

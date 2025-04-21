@@ -1,27 +1,19 @@
 import uuid
 from django.db import models
-from django.contrib.auth import get_user_model
-from products.models import Product
-
-User = get_user_model()
+from cart.models import Cart
+from datetime import datetime
 
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('Cart', 'Cart'),
-        ('Bought', 'Bought'),
+        ('Received', 'Received'),
         ('Shipped', 'Shipped'),
         ('Delivered', 'Delivered'),
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    createDate = models.DateTimeField(auto_now=True)
-    updateDate = models.DateTimeField(auto_now=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Cart')
-    shipping_address = models.TextField(default="")
-    billing_address = models.TextField(default="")
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='orders', null=True, blank=True)  # Allow null temporarily
+    created_at = models.DateTimeField(default=datetime.now)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Received')
 
     def __str__(self):
         return f"Order {self.id} - {self.status}"
-
