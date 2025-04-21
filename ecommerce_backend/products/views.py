@@ -31,8 +31,9 @@ class ProductViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(product)
         return Response(serializer.data)
 
-class ProductListingViewSet(ListModelMixin, GenericViewSet):
+class ProductListingViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
     def list(self, request, *args, **kwargs):
         products = self.queryset.values('id', 'image', 'description', 'price')

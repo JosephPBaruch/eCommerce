@@ -29,13 +29,11 @@ class LoginView(generics.GenericAPIView):
             'access': str(refresh.access_token),
         })
 
-class UserInfoView(APIView):
-    permission_classes = (IsAuthenticated,)
+class UserListView(APIView):
+    permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
     def get(self, request, *args, **kwargs):
-        return Response({
-            'username': request.user.username
-        })
-    
-# TODO: Logout view and logic
+        users = User.objects.all()
+        user_data = [{'id': user.id, 'username': user.username, 'email': user.email} for user in users]
+        return Response(user_data)
