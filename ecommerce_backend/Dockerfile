@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-WORKDIR /backend
+WORKDIR /ecommerce_backend
 
 COPY requirements.txt .
 
