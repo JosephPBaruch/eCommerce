@@ -14,7 +14,7 @@ spec:
           service:
             name: client
             port:
-              number: 8084
+              number: 80
       - path: /backend
         pathType: Prefix
         backend:
