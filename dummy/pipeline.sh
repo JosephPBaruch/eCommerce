@@ -42,7 +42,6 @@ cleanup() {
     kubectl delete -f client_service.yaml
     kubectl delete -f backend_deployment.yaml
     kubectl delete -f backend_service.yaml
-    kubectl delete -f pvc.yaml
 }
 
 run() {
@@ -53,17 +52,22 @@ run() {
     docker run -d -p 5000:5000 --restart=always --name registry registry:2
 
     # Build and push the client Docker image
-    if [[ "$(docker images -q $CLIENT_IMAGE 2> /dev/null)" == "" ]]; then
-        echo "Building the client Docker image..."
-        cd ../frontend
-        docker build -t $CLIENT_IMAGE .
-        cd ../frontend
-    fi
+    # if [[ "$(docker images -q $CLIENT_IMAGE 2> /dev/null)" == "" ]]; then
+    #     echo "Building the client Docker image..."
+    #     cd ../frontend
+    #     docker build -t $CLIENT_IMAGE .
+    #     cd ../frontend
+    # fi
+
+    # Use this for now
+    echo "Pulling a random client Docker image from the web..."
+    docker pull nginx:latest
+    docker tag nginx:latest $CLIENT_IMAGE
 
     # # Build and push the backend Docker image
     if [[ "$(docker images -q $BACKEND_IMAGE 2> /dev/null)" == "" ]]; then
         echo "Building the backend Docker image..."
-        cd ../backend
+        cd ../ecommerce_backend
         docker build -t $BACKEND_IMAGE .
         cd ../dummy
     fi
