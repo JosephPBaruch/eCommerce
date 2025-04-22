@@ -12,24 +12,24 @@ export default ({ mode }: { mode: string }) => {
     plugins: [react()],
     server: {
       proxy: {
-        '/products': {
+        '/v1/products': {
           target,
           changeOrigin: true,
           secure: false,
         },
-        '/products/': {
+        '/v1/products/': {
           target,
           changeOrigin: true,
           secure: false,
         },
-        '/users': {
+        '/v1/users': {
           target,
           changeOrigin: true,
           secure: false,
         },
         // Proxy requests starting with /api to the backend server
         '/api': {
-          target: 'http://127.0.0.1:8080',
+          target: 'http://127.0.0.1:8080/v1',
           changeOrigin: true, 
           secure: false,
           rewrite: (path) => path.replace(/^\/api/, ''),

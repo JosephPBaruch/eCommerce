@@ -23,11 +23,11 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-   path('users/', include('users.urls')),
-   path('products/', include('products.urls')),
-   path('orders/', include('orders.urls')),
-   path('cart/', include('cart.urls')),
+   path('v1/users/', include('users.urls')),
+   path('v1/products/', include('products.urls')),
+   path('v1/orders/', include('orders.urls')),
+   path('v1/cart/', include('cart.urls')),
 
-   path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
-   re_path(r"^swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
+   path('v1/swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
+   re_path(r"^v1/swagger(?P<format>\.json|\.yaml)$", schema_view.without_ui(cache_timeout=0), name="schema-json"),
 ]
