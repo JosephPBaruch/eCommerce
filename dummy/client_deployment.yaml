@@ -16,4 +16,4 @@ spec:
       - name: client
         image: localhost:5000/client:latest
         ports:
-        - containerPort: 8084
+        - containerPort: 5173
