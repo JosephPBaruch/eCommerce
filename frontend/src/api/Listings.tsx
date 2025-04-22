@@ -145,6 +145,7 @@ export const fetchActiveListings = async (): Promise<ListingCardData[]> => {
     const data = await response.json();
 
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return data.map((item: any) => ({
       id: item.id,
       title: item.name,
@@ -163,6 +164,7 @@ export const fetchActiveListings = async (): Promise<ListingCardData[]> => {
 
 export const updateListingApi = async (
   listingId: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   updateData: Record<string, any>,
   accessToken: string | null,
 ): Promise<{ success: boolean; message: string; listingId: string }> => {

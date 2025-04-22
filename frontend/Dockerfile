@@ -12,7 +12,7 @@ RUN npm run build
 
 FROM nginx:alpine
 
-COPY --from=builder /frontend/dist /usr/share/nginx/html/frontend
+COPY --from=builder /client/dist /usr/share/nginx/html/frontend
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 

@@ -156,6 +156,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
         throw new Error('Login successful, but tokens were not received.');
       }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error('Login Submit Error:', error);
       setEmailError(true);

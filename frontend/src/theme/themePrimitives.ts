@@ -19,7 +19,7 @@ declare module '@mui/material/styles' {
     900: string;
   }
 
-  interface PaletteColor extends ColorRange {}
+  // interface PaletteColor extends ColorRange {}
 
   interface Palette {
     baseShadow: string;
@@ -394,13 +394,12 @@ export const shape = {
   borderRadius: 8,
 };
 
-// @ts-ignore
-const defaultShadows: Shadows = [
-  'none',
-  'var(--template-palette-baseShadow)',
-  ...defaultTheme.shadows.slice(2),
-];
-export const shadows = defaultShadows;
+// const defaultShadows: Shadows = [
+//   'none',
+//   'var(--template-palette-baseShadow)',
+//   ...defaultTheme.shadows.slice(2),
+// ];
+// export const shadows = defaultShadows;
 
 // export const ThemedContainer = styled(Stack)(({ theme }) => ({
 //   height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',

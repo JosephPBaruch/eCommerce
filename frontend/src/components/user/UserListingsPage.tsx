@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Container,
     Typography,
@@ -9,7 +9,6 @@ import {
     ListItemAvatar,
     Avatar,
     Divider,
-    Chip,
     CircularProgress,
     Alert,
     Box,
@@ -25,7 +24,6 @@ import {
 import {
     ListAlt as ListAltIcon, // Icon for page title
     Visibility as VisibilityIcon,
-    Edit as EditIcon,
     DeleteOutline as DeleteIcon, // Or DeleteForever
     Inventory as InventoryIcon, 
     AddShoppingCart as AddShoppingCartIcon, 
@@ -44,7 +42,7 @@ import { fetchUserListings, deleteListingApi } from '../../api/Listings';
 import { UserListingSummary } from '../../types/listing'; 
 
 
-const ITEMS_PER_PAGE = 10;
+// const ITEMS_PER_PAGE = 10;
 
 const UserListingsPage: React.FC = () => {
     const [listings, setListings] = useState<UserListingSummary[]>([]);
@@ -87,7 +85,7 @@ const UserListingsPage: React.FC = () => {
         loadListings();
     }, [page, accessToken]); // Re-fetch if user, page, or token changes
 
-    const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
+    const handlePageChange = (value: number) => {
         setPage(value);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -97,10 +95,10 @@ const UserListingsPage: React.FC = () => {
         navigate(`/listing/${listingId}`); // Adjust path as needed
     };
 
-    const handleEditListing = (listingId: string) => {
-        // Navigate to the edit page for the listing
-        navigate(`/listing/${listingId}/edit`); // Adjust path as needed
-    };
+    // const handleEditListing = (listingId: string) => {
+    //     // Navigate to the edit page for the listing
+    //     navigate(`/listing/${listingId}/edit`); // Adjust path as needed
+    // };
 
     const handleOpenConfirmDialog = (listing: UserListingSummary) => {
         setListingToDelete(listing);
@@ -290,13 +288,13 @@ const UserListingsPage: React.FC = () => {
                                     <Pagination
                                         count={totalPages}
                                         page={page}
-                                        onChange={handlePageChange}
+                                        onChange={() => handlePageChange}
                                         color="primary"
                                         showFirstButton
                                         showLastButton
                                     />
                                 </Box>
-                            )}
+                            )}s
                         </>
                     )}
                 </Container> {/* End Main Content Container */}

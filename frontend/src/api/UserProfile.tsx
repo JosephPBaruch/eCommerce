@@ -1,5 +1,4 @@
 import { UserProfileData, PublicUserProfileData } from '../types/userProfile';
-import { UserListingSummary } from '../types/listing';
 
 export const fetchUserProfileData = async (accessToken: string|null): Promise<UserProfileData> => {
   let email: string
@@ -16,8 +15,9 @@ export const fetchUserProfileData = async (accessToken: string|null): Promise<Us
 
     if (!response.ok) {
       if (response.status === 404) {
+        throw new Error(`Failed to fetch listing details: ${response.statusText}`);
+
       }
-      throw new Error(`Failed to fetch listing details: ${response.statusText}`);
     }
 
     const data = await response.json();

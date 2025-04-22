@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { fetchCartItems, addCartItem, updateCartItem, deleteCartItem, fetchCart } from '../api/Cart';
+import { fetchCartItems, addCartItem,  deleteCartItem, fetchCart } from '../api/Cart';
 import { CartItem, FullCartItem } from '../types/cart';
 import { useAuth } from './AuthContext';
 import { ReactNode } from 'react';
@@ -56,10 +56,10 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const addItem = async (item: Partial<CartItem>) => {
     console.log("cartID:", cartId);
     if (!accessToken ) return;
-    var c_id = cartId;
+    let c_id = cartId;
     if (c_id === null || c_id === undefined || c_id === '') {
       console.log("Cart ID is null, fetching cart...");
-      var c = await fetchCart(accessToken);
+      const c = await fetchCart(accessToken);
       console.log("Cart ID from addItem:", c.id);
       c_id = c.id;
       setCartId(c.id);

@@ -29,7 +29,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import AppTheme from '../../theme/AppTheme';
 import AppAppBar from '../shared/AppAppBar';
 import Footer from '../shared/Footer';
-import { useAuth } from '../../context/AuthContext';
+// import { useAuth } from '../../context/AuthContext';
 import { fetchListingDetails } from '../../api/Listings';
 import { useCart } from '../../context/CartContext';
 
@@ -40,7 +40,7 @@ import { ListingDetails } from '../../types/listing';
 const ViewListingPage: React.FC = () => {
   const { listingId } = useParams<{ listingId: string }>();
   const navigate = useNavigate();
-  const { accessToken } = useAuth();
+  // const { accessToken } = useAuth();
   const { addItem } = useCart();
 
   const [listingDetails, setListingDetails] = useState<ListingDetails | null>(null);

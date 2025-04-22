@@ -17,24 +17,14 @@ import {
   ListItemText,
   CircularProgress,
   Alert,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   FormHelperText,
 } from '@mui/material';
-import {
-  LocalShipping as ShippingIcon,
-  Payment as PaymentIcon,
-  CheckCircle as ConfirmationIcon,
-} from '@mui/icons-material';
 
 import AppTheme from '../../theme/AppTheme';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppAppBar from '../shared/AppAppBar';
 import Footer from '../shared/Footer';
 import { useCart } from '../../context/CartContext';
-import { useAuth } from '../../context/AuthContext';
 
 // Types for form data
 interface ShippingFormData {
@@ -58,7 +48,7 @@ interface PaymentFormData {
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const { cartId, cartItems, removeItem, } = useCart();
-  const { accessToken } = useAuth();
+  // const { accessToken } = useAuth();
 
   const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -91,10 +81,10 @@ const CheckoutPage: React.FC = () => {
   useEffect(() => {
     // Redirect to cart if cart is empty
     if (!cartItems || cartItems.length === 0) {
-
+      console.log(cartId)
       navigate('/cart');
     }
-  }, [cartItems, navigate]);
+  }, [cartId, cartItems, navigate]);
 
   const steps = ['Shipping Information', 'Payment Details', 'Review Order'];
 

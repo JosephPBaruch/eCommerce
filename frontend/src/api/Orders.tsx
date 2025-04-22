@@ -36,9 +36,9 @@ export const fetchOrders = async (token: string): Promise<ApiOrder[]> => {
             try {
                 errorBody = await response.text();
             } catch (parseError) {
+                throw new Error(`API Error: ${response.status} ${response.statusText}. ${errorBody} ${parseError}`);
 
             }
-            throw new Error(`API Error: ${response.status} ${response.statusText}. ${errorBody}`);
         }
 
         const data: ApiOrder[] = await response.json();

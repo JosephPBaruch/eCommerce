@@ -103,7 +103,7 @@ const formatCurrency = (amount: number): string => {
 
 export default function MainContent() {
   const [allListings, setAllListings] = useState<ListingCardData[]>([]);
-  const [categoriesData, setCategoriesData] = useState<Category[]>(categories);
+  const [categoriesData] = useState<Category[]>(categories);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(ALL_CATEGORIES_ID);

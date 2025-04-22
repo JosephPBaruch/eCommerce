@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   Container,
   Typography,
@@ -7,15 +7,15 @@ import {
   ListItem,
   ListItemText,
   Divider,
-  Chip,
+  // Chip,
   CircularProgress,
   Alert,
   Box,
   Pagination,
   Button,
-  IconButton,
+  // IconButton,
 } from '@mui/material';
-import { ShoppingBag, ReceiptLong, Visibility } from '@mui/icons-material';
+import { ShoppingBag, ReceiptLong} from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
 
 import CssBaseline from '@mui/material/CssBaseline';
@@ -90,7 +90,7 @@ const OrderHistoryPage: React.FC = () => {
     console.error('Error loading order history:', err);
   };
 
-  const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
+  const handlePageChange = (value: number) => {
     setPage(value);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -183,7 +183,7 @@ const OrderHistoryPage: React.FC = () => {
                   <Pagination
                     count={totalPages}
                     page={page}
-                    onChange={handlePageChange}
+                    onChange={() => handlePageChange}
                     color="primary"
                     showFirstButton
                     showLastButton

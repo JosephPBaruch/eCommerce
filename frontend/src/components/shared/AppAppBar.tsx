@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const StyledToolbar = styled(Toolbar)(({ theme }: { theme: any }) => ({
   display: 'flex',
   alignItems: 'center',

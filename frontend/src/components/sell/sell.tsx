@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, FormEvent } from 'react';
 import {
     Container,
     Typography,
@@ -11,7 +11,7 @@ import {
     MenuItem,
     InputLabel,
     FormControl,
-    SelectChangeEvent,
+    // SelectChangeEvent,
     CircularProgress,
     Alert,
 } from '@mui/material';
@@ -25,7 +25,7 @@ import AppTheme from '../../theme/AppTheme';
 import AppAppBar from '../shared/AppAppBar';
 import Footer from '../shared/Footer';
 import { submitListingApi } from '../../api/Listings';
-import { ListingFormData, Category, Condition, CreateType } from '../../types/listing';
+import { Category, Condition, CreateType } from '../../types/listing';
 import { useAuth } from '../../context/AuthContext';
 
 
@@ -69,6 +69,7 @@ const SellItemPage: React.FC = () => {
         event.preventDefault();
         if (!isAuthenticated || !accessToken) {
             setError('You must be signed in to list an item.');
+            console.log(imageUrl)
             return;
         }
 
