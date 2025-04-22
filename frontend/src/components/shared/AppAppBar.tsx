@@ -12,14 +12,15 @@ import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Tooltip from '@mui/material/Tooltip';
 import ColorModeIconDropdown from '../../theme/ColorModeIconDropdown';
-import { SitemarkIcon } from '../shared/icons'; // Assuming this is your icon component
+import { SitemarkIcon } from '../shared/icons';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 
-const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+const StyledToolbar = styled(Toolbar)(({ theme }: { theme: any }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -55,7 +56,7 @@ export default function AppAppBar() {
     setOpen(false);
   };
 
-  // Style to remove border/outline and hover background from IconButton
+
   const iconButtonStyle = {
     p: 0,
     border: 'none',
@@ -69,8 +70,8 @@ export default function AppAppBar() {
     },
   };
 
-  // Define desired icon size
-  const iconSize = '1.8rem'; // Adjust this value as needed (e.g., '32px', '2rem')
+
+  const iconSize = '1.8rem';
 
   return (
     <AppBar
@@ -85,15 +86,13 @@ export default function AppAppBar() {
     >
       <Container maxWidth="lg">
         <StyledToolbar variant="dense" >
-          {/* Logo and Desktop Nav Links */}
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
             <IconButton
               onClick={() => navigate('/')}
-              sx={{ ...iconButtonStyle, mr: 5, ml:3}}
+              sx={{ ...iconButtonStyle, mr: 5, ml: 3, fontSize: iconSize }}
               aria-label="Go to homepage"
             >
-              {/* Apply size directly to the icon component */}
-              <SitemarkIcon sx={{ fontSize: iconSize }} />
+              <SitemarkIcon />
             </IconButton>
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <Button onClick={() => navigate('/')} variant="text" color="info" size="small">
@@ -115,6 +114,15 @@ export default function AppAppBar() {
           >
             {isAuthenticated ? (
               <>
+                <Tooltip title="Cart">
+                  <IconButton
+                    color="primary"
+                    onClick={() => handleNavigate('/cart')}
+                    size="small"
+                  >
+                    <ShoppingCartIcon />
+                  </IconButton>
+                </Tooltip>
                 <Tooltip title="Profile">
                   <IconButton
                     color="primary"
@@ -179,11 +187,10 @@ export default function AppAppBar() {
                 >
                   <IconButton
                     onClick={() => handleNavigate('/')}
-                    sx={iconButtonStyle}
+                    sx={{ ...iconButtonStyle, fontSize: iconSize }}
                     aria-label="Go to homepage"
                   >
-                     {/* Apply size directly to the icon component */}
-                     <SitemarkIcon sx={{ fontSize: iconSize }} />
+                    <SitemarkIcon />
                   </IconButton>
                   <IconButton onClick={toggleDrawer(false)}>
                     <CloseRoundedIcon />
@@ -199,6 +206,17 @@ export default function AppAppBar() {
                 {/* Mobile Auth Links */}
                 {isAuthenticated ? (
                   <>
+                    <MenuItem onClick={() => handleNavigate('/cart')}>
+                      <Button
+                        color="primary"
+                        variant="text"
+                        fullWidth
+                        startIcon={<ShoppingCartIcon />}
+                        sx={{ justifyContent: 'flex-start' }}
+                      >
+                        Cart
+                      </Button>
+                    </MenuItem>
                     <MenuItem onClick={() => handleNavigate('/profile')}>
                       <Button
                         color="primary"

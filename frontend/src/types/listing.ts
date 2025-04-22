@@ -1,19 +1,16 @@
 export interface UserListingSummary {
     id: string;
-    title: string;
+    name: string;
+    description: string;
     price: number;
-    status: 'Active' | 'Sold' | 'Inactive' | 'Draft'; // Example statuses
-    dateListed: string; // ISO date string
-    imageUrl?: string; // Primary image URL
-    quantity?: number; // Optional: if applicable
-    // Add other relevant summary fields like view count, etc. if needed
+    image: string;
+    brand: string;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface ListingsResponse {
     listings: UserListingSummary[];
-    currentPage: number;
-    totalPages: number;
-    totalCount: number;
 }
 
 export interface ListingFormData {
@@ -24,14 +21,14 @@ export interface ListingFormData {
     price: string;
     quantity: string;
     brand: string;
-    images: File[] | undefined;
+    imageUrl: string;
 }
 
-export type CreateType =  {
+export type CreateType = {
     name: string;
     description: string;
     price: string;
-    images: File[] | undefined;
+    image: string | null;
     type: string;
     brand: string;
 }
@@ -47,13 +44,13 @@ export interface Condition {
 }
 
 export interface ListingImageData {
-    id: string; // Or just use index if no specific ID
+    id: string;
     url: string;
     altText?: string;
 }
 
 export interface SellerInfo {
-    id: string; // User ID of the seller
+    id: string;
     username: string;
     avatarUrl?: string;
 }
@@ -63,34 +60,72 @@ export interface ListingDetails {
     title: string;
     description: string;
     price: number;
-    category: { id: string; name: string }; // Include category details
-    condition: { id: string; name: string }; // Include condition details
-    status: 'Active' | 'Sold' | 'Inactive' | 'Draft'; // Status might influence view
-    dateListed: string; // ISO date string
-    images: ListingImageData[]; // Array of images
+    category: { id: string; name: string };
+    condition: { id: string; name: string };
+    status: 'Active' | 'Sold' | 'Inactive' | 'Draft';
+    dateListed: string;
+    images: ListingImageData[];
     quantity: number;
     brand?: string;
     seller: SellerInfo;
-
 }
 
 export interface ListingCardData {
     id: string;
     title: string;
     price: number;
-    imageUrl?: string; // Primary image for the card
+    imageUrl?: string;
     categoryId: string;
-    // Add other fields if needed for filtering/display later (e.g., category)
 }
 
 export interface ListingsApiResponse {
-listings: ListingCardData[];
-// Add pagination fields if your API supports them (e.g., totalPages, currentPage)
+    listings: ListingCardData[];
 }
 
 export type ListingEditFormData = Omit<ListingDetails, 'id' | 'seller' | 'dateListed' | 'images' | 'price' | 'quantity' | 'category' | 'condition' | 'status'> & {
     price: string;
     quantity: string;
-    category: string; // Store category ID
-    condition: string; // Store condition ID
+    category: string;
+    condition: string;
 };
+
+
+export interface OrderSummary {
+    id: string;
+    date: string;
+    status: 'Received' | 'Shipped' | 'Delivered';
+}
+
+export interface ApiOrder {
+    id: string;
+    created_at: string;
+    status: 'Received' | 'Shipped' | 'Delivered';
+    cart: string | null;
+}
+
+export interface CartItem {
+    id: string;
+    product_id: string;
+    quantity: number;
+    cart: string;
+    product_name?: string;
+    price?: number;
+}
+
+export interface Cart {
+    id: string;
+    user: string;
+    created_at: string;
+    status: string;
+    shipping_address: string;
+    billing_address: string;
+    items: CartItem[];
+}
+
+export interface Order {
+    id: string;
+    created_at: string;
+    status: 'Received' | 'Shipped' | 'Delivered';
+    cart: string;
+    cartData?: Cart;
+}

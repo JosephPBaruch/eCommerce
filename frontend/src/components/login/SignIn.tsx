@@ -14,19 +14,15 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from './ForgotPassword';
 import AppTheme from '../../theme/AppTheme';
-// import { GoogleIcon, FacebookIcon, SitemarkIcon } from '../shared/icons';
-import {  SitemarkIcon } from '../shared/icons';
+import { SitemarkIcon } from '../shared/icons';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'; // <-- Import useAuth
-import Alert from '@mui/material/Alert'; // <-- Import Alert for errors
-import CircularProgress from '@mui/material/CircularProgress'; // <-- Import for loading
-// import { ThemedContainer } from '../../theme/themePrimitives';
+import { useAuth } from '../../context/AuthContext';
+import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
 import AppAppBar from '../shared/AppAppBar';
 import Container from '@mui/material/Container';
 
 
-
-// --- Styled components (Card, SignInContainer) remain the same ---
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -47,7 +43,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 
-// --- End Styled components ---
+
 
 export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const [emailError, setEmailError] = React.useState(false);
@@ -55,13 +51,13 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
-  const [isSubmitting, setIsSubmitting] = React.useState(false); // Local submitting state
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const navigate = useNavigate();
-  const { login, error: authError, clearError } = useAuth(); // <-- Use the auth context
+  const { login, error: authError, clearError } = useAuth();
 
   React.useEffect(() => {
-    // Clear auth errors when component mounts or unmounts
+
     return () => {
       clearError();
     };
@@ -76,7 +72,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
   };
 
   const validateInputs = () => {
-    // Clear previous validation errors
+
     setEmailError(false);
     setEmailErrorMessage('');
     setPasswordError(false);
@@ -108,25 +104,25 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    clearError(); // Clear previous auth errors
+    clearError();
 
     if (!validateInputs()) {
-      return; // Stop submission if validation fails
+      return;
     }
 
-    setIsSubmitting(true); // Start submitting indicator
+    setIsSubmitting(true);
 
     const data = new FormData(event.currentTarget);
     const userData = {
-      // Ensure backend expects 'username' 
-      // Or change to 'email' if the backend expects 'email'
+
+
       username: data.get('email'),
       password: data.get('password'),
     };
 
     try {
-      // -------------- Real Api Request -----------------------------
-      const response = await fetch('http://127.0.0.1:8080/users/login/', {
+
+      const response = await fetch('/users/login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -134,37 +130,39 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
         body: JSON.stringify(userData),
       });
 
-      const result = await response.json(); // Try to parse JSON regardless of status
+      const result = await response.json();
 
       if (!response.ok) {
-        // Handle specific API errors (e.g., invalid credentials)
+
         const errorMessage =
-          result?.detail || // Common key for DRF errors
-          result?.error || // Generic error key
+          result?.detail ||
+          result?.error ||
           `Login failed (Status: ${response.status})`;
         throw new Error(errorMessage);
       }
 
-      if (result.access) {
-        // Use the login function from AuthContext
-        login(result.access);
-        console.log('User logged in via component!');
-        navigate('/'); // Navigate to home page on successful login
+      if (result.access && result.refresh) {
+
+        login({ access: result.access, refresh: result.refresh });
+        console.log('User logged in via SignIn component!');
+        navigate('/');
+      } else if (result.access) {
+
+        console.warn('SignIn: Login endpoint only returned access token.');
+        login({ access: result.access, refresh: '' });
+        navigate('/');
       } else {
-        // Handle cases where tokens are missing in a 2xx response (unexpected)
+
         throw new Error('Login successful, but tokens were not received.');
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     } catch (error: any) {
-      console.error('Login Error:', error);
-      // Set the error state in the AuthContext (or handle locally if preferred)
-      // For now, display it locally using Alert
-      setEmailError(true); // Indicate error on fields potentially
+      console.error('Login Submit Error:', error);
+      setEmailError(true);
       setPasswordError(true);
-      // display the authError from context below
-      
+
     } finally {
-      setIsSubmitting(false); // Stop submitting indicator
+      setIsSubmitting(false);
     }
   };
 
@@ -172,7 +170,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
       <AppAppBar></AppAppBar>
-      <Container sx={{my: 30}}>
+      <Container sx={{ my: 30 }}>
         <Card variant="outlined">
           <Button onClick={() => navigate('/')}>
             <SitemarkIcon />
@@ -196,7 +194,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
           <Box
             component="form"
             onSubmit={handleSubmit}
-            noValidate // Keep noValidate, handle validation manually
+            noValidate
             sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -219,7 +217,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                 fullWidth
                 variant="outlined"
                 color={emailError ? 'error' : 'primary'}
-                disabled={isSubmitting} // Disable during submission
+                disabled={isSubmitting}
               />
             </FormControl>
             <FormControl>
@@ -232,12 +230,12 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                // autoFocus // Remove second autoFocus
+
                 required
                 fullWidth
                 variant="outlined"
                 color={passwordError ? 'error' : 'primary'}
-                disabled={isSubmitting} // Disable during submission
+                disabled={isSubmitting}
               />
             </FormControl>
             <FormControlLabel
@@ -250,8 +248,8 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
               type="submit"
               fullWidth
               variant="contained"
-              disabled={isSubmitting} // Disable button during submission
-              // Remove onClick={validateInputs} - validation happens in handleSubmit
+              disabled={isSubmitting}
+
               startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : null}
             >
               {isSubmitting ? 'Signing In...' : 'Sign in'}
@@ -269,30 +267,12 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
           </Box>
           <Divider>or</Divider>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {/* <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('Sign in with Google')}
-              startIcon={<GoogleIcon />}
-              disabled={isSubmitting}
-            >
-              Sign in with Google
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('Sign in with Facebook')}
-              startIcon={<FacebookIcon />}
-              disabled={isSubmitting}
-            >
-              Sign in with Facebook
-            </Button> */}
             <Typography sx={{ textAlign: 'center' }}>
               Don&apos;t have an account?{' '}
               <Link
-                // Use React Router Link or navigate for internal navigation
+
                 onClick={() => navigate('/signup')}
-                component="button" // Make it behave like a button for onClick
+                component="button"
                 variant="body2"
                 sx={{ alignSelf: 'center' }}
                 disabled={isSubmitting}

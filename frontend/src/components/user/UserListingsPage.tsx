@@ -27,20 +27,20 @@ import {
     Visibility as VisibilityIcon,
     Edit as EditIcon,
     DeleteOutline as DeleteIcon, // Or DeleteForever
-    Inventory as InventoryIcon, // Fallback for image
-    AddShoppingCart as AddShoppingCartIcon, // For "List an Item" button
+    Inventory as InventoryIcon, 
+    AddShoppingCart as AddShoppingCartIcon, 
     WarningAmber as WarningIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
-// Import shared components & context
+
 import CssBaseline from '@mui/material/CssBaseline';
 import AppTheme from '../../theme/AppTheme'; 
 import AppAppBar from '../shared/AppAppBar'; 
 import Footer from '../shared/Footer';
 import { useAuth } from '../../context/AuthContext';
 import { fetchUserListings, deleteListingApi } from '../../api/Listings';
-// Import types
+
 import { UserListingSummary } from '../../types/listing'; 
 
 
@@ -53,9 +53,9 @@ const UserListingsPage: React.FC = () => {
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(0);
     const navigate = useNavigate();
-    const { accessToken, uid } = useAuth(); // Get token and potentially user ID if needed by API
+    const { accessToken } = useAuth(); 
 
-    // Delete Confirmation Dialog State
+    
     const [confirmDialogOpen, setConfirmDialogOpen] = useState<boolean>(false);
     const [listingToDelete, setListingToDelete] = useState<UserListingSummary | null>(null);
     const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -66,12 +66,13 @@ const UserListingsPage: React.FC = () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetchUserListings( page, ITEMS_PER_PAGE, localStorage.getItem("access_token"));
+                const response = await fetchUserListings(
+                    accessToken
+                );
                 setListings(response.listings);
-                setTotalPages(response.totalPages);
             } catch (err) {
-                if (err instanceof Error && err.message === 'Unauthorized') {
-                    navigate('/signin'); // Redirect to sign-in page
+                if (err instanceof Error && err.message.includes('Unauthorized')) {
+                    navigate('/signin');
                 } else {
                     setError(err instanceof Error ? err.message : 'Failed to load listings.');
                 }
@@ -84,7 +85,7 @@ const UserListingsPage: React.FC = () => {
         };
 
         loadListings();
-    }, [uid, page, accessToken]); // Re-fetch if user, page, or token changes
+    }, [page, accessToken]); // Re-fetch if user, page, or token changes
 
     const handlePageChange = (event: ChangeEvent<unknown>, value: number) => {
         setPage(value);
@@ -116,11 +117,14 @@ const UserListingsPage: React.FC = () => {
         setIsDeleting(true);
         setError(null);
         try {
-            await deleteListingApi(listingToDelete.id, accessToken);
+            await deleteListingApi(
+                listingToDelete.id,
+                localStorage.getItem('access_token') || ""
+            );
             setListings(prev => prev.filter(l => l.id !== listingToDelete.id));
             handleCloseConfirmDialog();
         } catch (err) {
-            if (err instanceof Error && err.message === 'Unauthorized') {
+            if (err instanceof Error && err.message.includes('Unauthorized')) {
                 navigate('/signin'); // Redirect to sign-in page
             } else {
                 setError(err instanceof Error ? err.message : 'Failed to delete listing.');
@@ -145,30 +149,6 @@ const UserListingsPage: React.FC = () => {
             style: 'currency',
             currency: 'USD', // Adjust currency as needed
         }).format(amount);
-    };
-
-    const getStatusChipColor = (
-        status: UserListingSummary['status'],
-    ):
-        | 'default'
-        | 'primary'
-        | 'secondary'
-        | 'error'
-        | 'info'
-        | 'success'
-        | 'warning' => {
-        switch (status) {
-            case 'Active':
-                return 'success';
-            case 'Sold':
-                return 'secondary';
-            case 'Inactive':
-                return 'default';
-            case 'Draft':
-                return 'warning';
-            default:
-                return 'default';
-        }
     };
 
     // Estimate AppBar height
@@ -241,24 +221,18 @@ const UserListingsPage: React.FC = () => {
                                         {listings.map((listing, index) => (
                                             <React.Fragment key={listing.id}>
                                                 <ListItem
-                                                    alignItems="flex-start" // Align items to top
+                                                    alignItems="flex-start"
                                                     secondaryAction={
                                                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1, pt: 1 }}>
-                                                            <Chip
-                                                                label={listing.status}
-                                                                color={getStatusChipColor(listing.status)}
-                                                                size="small"
-                                                                sx={{ mb: 1, minWidth: '70px' }}
-                                                            />
+
                                                             <Box sx={{ display: 'flex', gap: 0.5 }}>
                                                                 <Tooltip title="View Listing">
                                                                     <IconButton size="small" onClick={() => handleViewListing(listing.id)}>
                                                                         <VisibilityIcon fontSize="small" />
                                                                     </IconButton>
                                                                 </Tooltip>
-                                                                <Tooltip title="Edit Listing">
-                                                                    {/* Disable edit for Sold/Inactive? Optional */}
-                                                                    <span> {/* Tooltip wrapper for disabled */}
+                                                                {/* <Tooltip title="Edit Listing">
+                                                                    <span> 
                                                                         <IconButton
                                                                             size="small"
                                                                             onClick={() => handleEditListing(listing.id)}
@@ -267,7 +241,7 @@ const UserListingsPage: React.FC = () => {
                                                                             <EditIcon fontSize="small" />
                                                                         </IconButton>
                                                                     </span>
-                                                                </Tooltip>
+                                                                </Tooltip> */}
                                                                 <Tooltip title="Delete Listing">
                                                                     <IconButton size="small" color="error" onClick={() => handleOpenConfirmDialog(listing)}>
                                                                         <DeleteIcon fontSize="small" />
@@ -281,29 +255,23 @@ const UserListingsPage: React.FC = () => {
                                                     <ListItemAvatar sx={{ mr: 2, mt: 1 }}>
                                                         <Avatar
                                                             variant="rounded"
-                                                            src={listing.imageUrl || undefined}
-                                                            alt={listing.title}
+                                                            src={listing.image || undefined}
+                                                            alt={listing.name}
                                                             sx={{ width: 80, height: 80, bgcolor: 'grey.200' }}
                                                         >
-                                                            <InventoryIcon /> {/* Fallback */}
+                                                            <InventoryIcon />
                                                         </Avatar>
                                                     </ListItemAvatar>
                                                     <ListItemText
-                                                        primary={listing.title}
+                                                        primary={listing.name}
                                                         secondary={
                                                             <>
                                                                 <Typography component="span" variant="body1" color="text.primary" fontWeight="bold" display="block">
                                                                     {formatCurrency(listing.price)}
                                                                 </Typography>
                                                                 <Typography component="span" variant="body2" color="text.secondary">
-                                                                    Listed: {formatDate(listing.dateListed)}
+                                                                    Listed: {formatDate(listing.created_at)}
                                                                 </Typography>
-                                                                {listing.quantity && listing.quantity > 1 && (
-                                                                    <Typography component="span" variant="body2" color="text.secondary" display="block">
-                                                                        Quantity: {listing.quantity}
-                                                                    </Typography>
-                                                                )}
-                                                                {/* Add other details like views if available */}
                                                             </>
                                                         }
                                                         sx={{ pr: { xs: 0, sm: 15 } }} // Add padding right to avoid overlap with actions on smaller screens
@@ -340,7 +308,7 @@ const UserListingsPage: React.FC = () => {
                     </DialogTitle>
                     <DialogContent>
                         <Typography>
-                            Are you sure you want to delete the listing "{listingToDelete?.title}"? This action cannot be undone.
+                            Are you sure you want to delete the listing "{listingToDelete?.name}"? This action cannot be undone.
                         </Typography>
                     </DialogContent>
                     <DialogActions>

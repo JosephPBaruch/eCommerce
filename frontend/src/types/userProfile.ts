@@ -1,4 +1,4 @@
-// src/types/userProfile.ts
+
 import { UserListingSummary } from './listing';
 
 export interface UserProfileData {
@@ -8,7 +8,7 @@ export interface UserProfileData {
 export interface OrderSummary {
     id: string;
     orderNumber: string;
-    date: string; // ISO date string ideally
+    date: string; 
     total: number;
     status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled' | 'Pending';
 }
@@ -24,30 +24,18 @@ export interface Address {
     isDefaultBilling?: boolean;
 }
 
-// export interface UserProfileData {
-//     id: string;
-//     firstName: string;
-//     lastName: string;
-//     email: string;
-//     username?: string; // Optional
-//     avatarUrl?: string; // Optional
-//     joinDate: string; // ISO date string ideally
-//     recentOrders: OrderSummary[];
-//     addresses: Address[];
-
-// }
 
 export interface PublicUserProfileData {
-  id: string; // User's ID
+  id: string; 
   username: string;
   avatarUrl?: string;
-  joinDate: string; // ISO date string
-  // Optional public fields:
+  joinDate: string; 
+  
   bio?: string;
   location?: string;
-  // Example reputation fields (replace/add as needed)
+  
   positiveFeedbackPercent?: number;
   numSales?: number;
-  // Listings associated with this user
-  activeListings: UserListingSummary[]; // Show only active listings publicly
+  
+  activeListings: UserListingSummary[]; 
 }

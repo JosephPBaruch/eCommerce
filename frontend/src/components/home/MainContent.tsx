@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, ChangeEvent  } from 'react'; 
+import { useState, useEffect, useMemo, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -14,14 +14,14 @@ import { styled } from '@mui/material/styles';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
-import { ListingCardData, Category } from '../../types/listing'; // Adjust path
-import { fetchActiveListings } from '../../api/Listings'; // Adjust path
+import { ListingCardData, Category } from '../../types/listing';
+import { fetchActiveListings } from '../../api/Listings';
 import Grid from '@mui/material/GridLegacy';
 
 
 
-// --- Define Categories ---
-// In a real app, fetch these or get them from a config
+
+
 const categories = [
   { id: 'all', name: 'All Categories' },
   { id: 'electronics', name: 'Electronics' },
@@ -29,11 +29,11 @@ const categories = [
   { id: 'home', name: 'Home' },
   { id: 'toys', name: 'Toys' },
   { id: 'other', name: 'Other' },
-  // Add more categories as needed
-];
-const ALL_CATEGORIES_ID = 'all'; // Constant for the "All" category ID
 
-// Styled components (keep as they are)
+];
+const ALL_CATEGORIES_ID = 'all';
+
+
 const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -62,22 +62,22 @@ const StyledTypography = styled(Typography)({
   minHeight: '2.5em',
 });
 
-// Define props for the Search component
+
 interface SearchProps {
   value: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-// Update Search component to accept and use props
+
 export function Search({ value, onChange }: SearchProps) {
   return (
     <FormControl sx={{ width: { xs: '100%', md: '25ch' } }} variant="outlined">
       <OutlinedInput
         size="small"
         id="search"
-        placeholder="Search listings…" // More specific placeholder
-        value={value} // Controlled input value
-        onChange={onChange} // Handle input changes
+        placeholder="Search listings…"
+        value={value}
+        onChange={onChange}
         sx={{ flexGrow: 1 }}
         startAdornment={
           <InputAdornment position="start" sx={{ color: 'text.primary' }}>
@@ -92,38 +92,32 @@ export function Search({ value, onChange }: SearchProps) {
   );
 }
 
-// Helper function for currency formatting
+
 const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat(undefined, {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount);
-  };
+  return new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency: 'USD',
+  }).format(amount);
+};
 
 
 export default function MainContent() {
   const [allListings, setAllListings] = useState<ListingCardData[]>([]);
-  const [categoriesData, setCategoriesData] = useState<Category[]>(categories); // Use static categories for now
+  const [categoriesData, setCategoriesData] = useState<Category[]>(categories);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(ALL_CATEGORIES_ID);
-  const [searchTerm, setSearchTerm] = useState<string>(''); // <-- State for search term
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const navigate = useNavigate();
 
-  // Fetch listings (categories are static for now)
+
   useEffect(() => {
     const loadListings = async () => {
       setLoading(true);
       setError(null);
       try {
-        // In a real app, you might fetch categories too:
-        // const [listingsData, categoriesData] = await Promise.all([
-        //   fetchActiveListings(),
-        //   fetchCategories() // Assuming you have this API call
-        // ]);
         const listingsData = await fetchActiveListings();
         setAllListings(listingsData);
-        // setCategoriesData(categoriesData); // If fetching categories
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load initial data.');
         console.error('Error fetching initial data:', err);
@@ -138,25 +132,25 @@ export default function MainContent() {
   const filteredListings = useMemo(() => {
     let listingsToFilter = allListings;
 
-    // 1. Filter by Category
+
     if (selectedCategoryId !== ALL_CATEGORIES_ID) {
       listingsToFilter = listingsToFilter.filter(
         listing => listing.categoryId === selectedCategoryId
       );
     }
 
-    // 2. Filter by Search Term (case-insensitive title search)
+
     if (searchTerm.trim() !== '') {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
       listingsToFilter = listingsToFilter.filter(listing =>
         listing.title.toLowerCase().includes(lowerCaseSearchTerm)
-        // Optional: search description too
-        // || (listing.description && listing.description.toLowerCase().includes(lowerCaseSearchTerm))
+
+
       );
     }
 
     return listingsToFilter;
-  }, [allListings, selectedCategoryId, searchTerm]); // Dependencies updated
+  }, [allListings, selectedCategoryId, searchTerm]);
 
 
   const handleCardClick = (listingId: string) => {
@@ -167,70 +161,70 @@ export default function MainContent() {
     setSelectedCategoryId(categoryId);
   };
 
-  // Handler for search input changes
+
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
-  // Generate message for empty results
+
   const getEmptyMessage = () => {
     let message = "No listings found";
     if (selectedCategoryId !== ALL_CATEGORIES_ID) {
-        const categoryName = categoriesData.find(c => c.id === selectedCategoryId)?.name || 'the selected category';
-        message += ` in ${categoryName}`;
+      const categoryName = categoriesData.find(c => c.id === selectedCategoryId)?.name || 'the selected category';
+      message += ` in ${categoryName}`;
     }
     if (searchTerm.trim() !== '') {
-        message += ` matching "${searchTerm}"`;
+      message += ` matching "${searchTerm}"`;
     }
     return message + ".";
-}
-return (
-  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-    {/* Title Section */}
-    <div>
-      <Typography variant="h1" gutterBottom>
-        Store
-      </Typography>
-    </div>
+  }
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      {/* Title Section */}
+      <div>
+        <Typography variant="h1" gutterBottom>
+          Store
+        </Typography>
+      </div>
 
-    {/* Search Bar/Product Filters */}
-    {/* Mobile Search */}
-    <Box
-      sx={{
-        display: { xs: 'flex', sm: 'none', pl: 30},
-        // ... other styles
-      }}
-    >
-      <Search value={searchTerm} onChange={handleSearchChange} /> {/* Pass props */}
-    </Box>
-    <Box
-      sx={{display: 'flex'}}
-    >
-      {/* Category Chips */}
+      {/* Search Bar/Product Filters */}
+      {/* Mobile Search */}
       <Box
-        sx={{}}
-      >
-        {categoriesData.map((category) => (
-          <Chip
-            key={category.id}
-            label={category.name}
-            size="medium"
-            onClick={() => handleCategoryClick(category.id)}
-            variant={selectedCategoryId === category.id ? 'filled' : 'outlined'}
-            color={selectedCategoryId === category.id ? 'primary' : 'default'}
-            clickable // Added clickable prop
-          />
-        ))}
-      </Box>
-      {/* Desktop Search */}
-      <Box 
-      sx={{
-          display: { xs: 'none', sm: 'flex', pl: 30, justifySelf: 'end'},
+        sx={{
+          display: { xs: 'flex', sm: 'none', pl: 30 },
+
         }}
       >
-        <Search value={searchTerm} onChange={handleSearchChange} />
+        <Search value={searchTerm} onChange={handleSearchChange} /> {/* Pass props */}
       </Box>
-    </Box>
+      <Box
+        sx={{ display: 'flex' }}
+      >
+        {/* Category Chips */}
+        <Box
+          sx={{}}
+        >
+          {categoriesData.map((category) => (
+            <Chip
+              key={category.id}
+              label={category.name}
+              size="medium"
+              onClick={() => handleCategoryClick(category.id)}
+              variant={selectedCategoryId === category.id ? 'filled' : 'outlined'}
+              color={selectedCategoryId === category.id ? 'primary' : 'default'}
+              clickable
+            />
+          ))}
+        </Box>
+        {/* Desktop Search */}
+        <Box
+          sx={{
+            display: { xs: 'none', sm: 'flex', pl: 30, justifySelf: 'end' },
+          }}
+        >
+          <Search value={searchTerm} onChange={handleSearchChange} />
+        </Box>
+      </Box>
 
       {/* Loading State */}
       {loading && (
@@ -246,42 +240,41 @@ return (
         </Alert>
       )}
 
-    {/* Products Grid - Render filteredListings */}
-    {!loading && !error && (
-      <Grid container spacing={2} columns={12}>
-        {filteredListings.length === 0 ? (
-           <Grid item xs={12}>
+      {/* Products Grid - Render filteredListings */}
+      {!loading && !error && (
+        <Grid container spacing={2} columns={12}>
+          {filteredListings.length === 0 ? (
+            <Grid item xs={12}>
               <Typography sx={{ textAlign: 'center', mt: 4 }}>
                 {getEmptyMessage()} {/* Use dynamic empty message */}
               </Typography>
-           </Grid>
-        ) : (
-          filteredListings.map((listing) => (
-            <Grid item key={listing.id} xs={12} sm={6} md={4} lg={3}>
-              <StyledCard variant="outlined">
-                <CardActionArea onClick={() => handleCardClick(listing.id)}>
-                  <CardMedia
-                    component="img"
-                    alt={listing.title}
-                    image={listing.imageUrl || "https://picsum.photos/400/300?random=5"}
-                    sx={{ /* ... */ }}
-                  />
-                  <StyledCardContent>
-                    <StyledTypography gutterBottom variant="h6" as="div">
-                      {listing.description}
-                    </StyledTypography>
-                    <Typography variant="body1" color="primary" fontWeight="bold">
-                      {formatCurrency(listing.price)}
-                    </Typography>
-                  </StyledCardContent>
-                </CardActionArea>
-              </StyledCard>
             </Grid>
-          ))
-        )}
-      </Grid>
-    )}
-  </Box>
-);
+          ) : (
+            filteredListings.map((listing, index) => (
+              <Grid item key={listing.id} xs={12} sm={6} md={4} lg={3}>
+                <StyledCard variant="outlined">
+                  <CardActionArea onClick={() => handleCardClick(listing.id)}>
+                    <CardMedia
+                      component="img"
+                      alt={listing.title}
+                      image={listing.imageUrl || `https://picsum.photos/400/300?random=${index + 1}`}
+                    />
+                    <StyledCardContent>
+                      <StyledTypography gutterBottom variant="h6" as="div">
+                        {listing.title} {/* Updated to display title */}
+                      </StyledTypography>
+                      <Typography variant="body1" color="primary" fontWeight="bold">
+                        {formatCurrency(listing.price)}
+                      </Typography>
+                    </StyledCardContent>
+                  </CardActionArea>
+                </StyledCard>
+              </Grid>
+            ))
+          )}
+        </Grid>
+      )}
+    </Box>
+  );
 }
 
