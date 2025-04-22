@@ -3,7 +3,7 @@
 
 source .venv/bin/activate
 
-pip freeze > requirements.txt
+## DONT FORGET TO ADD TO THE REQUIREMENTS WHEN DOWNLOADING STUFF
 
 python manage.py makemigrations
 python manage.py migrate

@@ -21,4 +21,4 @@ spec:
           service:
             name: backend
             port:
-              number: 8082
+              number: 8080

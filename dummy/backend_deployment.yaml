@@ -16,8 +16,5 @@ spec:
       - name: backend
         image: localhost:5000/backend:latest
         ports:
-        - containerPort: 8082
-        env:
-        - name: BACKEND_PORT
-          value: "8082"
+        - containerPort: 8080
  
