@@ -1,5 +1,6 @@
-from pathlib import Path
 import os
+from pathlib import Path
+
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -108,10 +109,10 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8084", 
+    "http://localhost:8084",
+    "http://localhost:5173", 
 ]
 
-# CORS_ALLOW_ALL_ORIGINS = True
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {

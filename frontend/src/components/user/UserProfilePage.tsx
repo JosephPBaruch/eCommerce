@@ -18,29 +18,31 @@ import { UserProfileData } from '../../types/userProfile';
 import { fetchUserProfileData } from '../../api/UserProfile';
 import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/GridLegacy';
+import { useAuth } from '../../context/AuthContext'; // Import useAuth
 
 const UserProfilePage: React.FC = () => {
     const [userData, setUserData] = useState<UserProfileData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+    const { accessToken } = useAuth();
+
 
     useEffect(() => {
         const loadData = async () => {
             setLoading(true);
             setError(null);
             try {
-                const data = await fetchUserProfileData(localStorage.getItem('access_token') || "");
+                const data = await fetchUserProfileData(accessToken);
                 setUserData(data);
             } catch (err) {
+                console.error('Error fetching user profile in UserProfilePage:', err);
                 if (err instanceof Error && err.message === 'Unauthorized') {
-                    navigate('/signin'); // Navigate to sign-in page if unauthorized
+                    navigate('/signin');
                 } else {
-                    setError(
-                        err instanceof Error ? err.message : 'An unknown error occurred',
-                    );
+                    const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+                    setError(errorMessage);
                 }
-                console.error('Error fetching user profile:', err);
             } finally {
                 setLoading(false);
             }
@@ -94,22 +96,21 @@ const UserProfilePage: React.FC = () => {
                                     <Email fontSize="small" sx={{ mr: 1 }} color="action" />
                                     <Typography variant="body2">{userData.email}</Typography>
                                 </Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-around', width: '100%', mt: 2 }}> {/* Adjusted layout */}
                                     <Button
                                         size="small"
                                         onClick={() => navigate('/profile/orders')}
                                     >
-                                        View All Orders
+                                        View Orders
                                     </Button>
-                                </Box>
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
                                     <Button
                                         size="small"
                                         onClick={() => navigate('/profile/listings')}
                                     >
-                                        View All Listings
+                                        View Listings
                                     </Button>
                                 </Box>
+
                             </Paper>
                         </Grid>
                     </Grid>

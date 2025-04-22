@@ -1,0 +1,799 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "eCommerce Backend API",
+        "description": "AUTHENTICATION INSTRUCTIONS: \nTo authenticate the swagger UI playground: \n\n    1. use the /login and/or /register endpoint to obtain the access token\n    2. copy the access key\n    3. navigate to the swagger ui 'Authenticate' button and type, 'Bearer <paste access token here>'.\n\nAfter, all other requests requiring authentication can be made.",
+        "version": "v1"
+    },
+    "host": "127.0.0.1:8080",
+    "schemes": [
+        "http"
+    ],
+    "basePath": "/",
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "Enter 'Bearer <your_token>' to authenticate."
+        }
+    },
+    "security": [
+        {
+            "Bearer": []
+        }
+    ],
+    "paths": {
+        "/cart/": {
+            "get": {
+                "operationId": "cart_list",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Cart"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "cart"
+                ]
+            },
+            "post": {
+                "operationId": "cart_create",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Cart"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Cart"
+                        }
+                    }
+                },
+                "tags": [
+                    "cart"
+                ]
+            },
+            "parameters": []
+        },
+        "/cart/items/": {
+            "get": {
+                "operationId": "cart_items_list",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/CartItem"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "cart"
+                ]
+            },
+            "post": {
+                "operationId": "cart_items_create",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CartItem"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/CartItem"
+                        }
+                    }
+                },
+                "tags": [
+                    "cart"
+                ]
+            },
+            "parameters": []
+        },
+        "/cart/items/{id}/": {
+            "put": {
+                "operationId": "cart_items_update",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CartItem"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/CartItem"
+                        }
+                    }
+                },
+                "tags": [
+                    "cart"
+                ]
+            },
+            "delete": {
+                "operationId": "cart_items_delete",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "cart"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ]
+        },
+        "/orders/": {
+            "get": {
+                "operationId": "orders_list",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Orders"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "orders"
+                ]
+            },
+            "post": {
+                "operationId": "orders_create",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Orders"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Orders"
+                        }
+                    }
+                },
+                "tags": [
+                    "orders"
+                ]
+            },
+            "parameters": []
+        },
+        "/orders/{id}/": {
+            "get": {
+                "operationId": "orders_read",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Orders"
+                        }
+                    }
+                },
+                "tags": [
+                    "orders"
+                ]
+            },
+            "put": {
+                "operationId": "orders_update",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Orders"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Orders"
+                        }
+                    }
+                },
+                "tags": [
+                    "orders"
+                ]
+            },
+            "delete": {
+                "operationId": "orders_delete",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "orders"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ]
+        },
+        "/products/": {
+            "get": {
+                "operationId": "products_list",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Product"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "products"
+                ]
+            },
+            "post": {
+                "operationId": "products_create",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    }
+                },
+                "tags": [
+                    "products"
+                ]
+            },
+            "parameters": []
+        },
+        "/products/listing/": {
+            "get": {
+                "operationId": "products_listing_list",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Product"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "products"
+                ]
+            },
+            "parameters": []
+        },
+        "/products/user-products/": {
+            "get": {
+                "operationId": "products_user-products_list",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Product"
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "products"
+                ]
+            },
+            "parameters": []
+        },
+        "/products/{id}/": {
+            "get": {
+                "operationId": "products_read",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    }
+                },
+                "tags": [
+                    "products"
+                ]
+            },
+            "put": {
+                "operationId": "products_update",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    }
+                },
+                "tags": [
+                    "products"
+                ]
+            },
+            "delete": {
+                "operationId": "products_delete",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "products"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ]
+        },
+        "/products/{id}/delete/": {
+            "delete": {
+                "operationId": "products_delete_delete",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "products"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ]
+        },
+        "/products/{id}/edit/": {
+            "patch": {
+                "operationId": "products_edit_partial_update",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "products"
+                ]
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ]
+        },
+        "/users/all/": {
+            "get": {
+                "operationId": "users_all_list",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "users"
+                ]
+            },
+            "parameters": []
+        },
+        "/users/login/": {
+            "post": {
+                "operationId": "users_login_create",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Login"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Login"
+                        }
+                    }
+                },
+                "tags": [
+                    "users"
+                ]
+            },
+            "parameters": []
+        },
+        "/users/me/": {
+            "get": {
+                "operationId": "users_me_list",
+                "description": "",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "users"
+                ]
+            },
+            "parameters": []
+        },
+        "/users/register/": {
+            "post": {
+                "operationId": "users_register_create",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Register"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/Register"
+                        }
+                    }
+                },
+                "tags": [
+                    "users"
+                ]
+            },
+            "parameters": []
+        }
+    },
+    "definitions": {
+        "Cart": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "type": "string",
+                    "format": "uuid",
+                    "readOnly": true
+                },
+                "user": {
+                    "title": "User",
+                    "type": "string",
+                    "readOnly": true
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "readOnly": true,
+                    "uniqueItems": true
+                },
+                "created_at": {
+                    "title": "Created at",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "status": {
+                    "title": "Status",
+                    "type": "string",
+                    "enum": [
+                        "Cart",
+                        "Paid"
+                    ]
+                },
+                "shipping_address": {
+                    "title": "Shipping address",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "billing_address": {
+                    "title": "Billing address",
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "CartItem": {
+            "required": [
+                "product_id",
+                "quantity",
+                "cart"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "type": "string",
+                    "format": "uuid",
+                    "readOnly": true
+                },
+                "product_id": {
+                    "title": "Product id",
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "quantity": {
+                    "title": "Quantity",
+                    "type": "integer",
+                    "maximum": 9223372036854775807,
+                    "minimum": 0
+                },
+                "cart": {
+                    "title": "Cart",
+                    "type": "string",
+                    "format": "uuid"
+                }
+            }
+        },
+        "Orders": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "type": "string",
+                    "format": "uuid",
+                    "readOnly": true
+                },
+                "created_at": {
+                    "title": "Created at",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "status": {
+                    "title": "Status",
+                    "type": "string",
+                    "enum": [
+                        "Received",
+                        "Shipped",
+                        "Delivered"
+                    ]
+                },
+                "cart": {
+                    "title": "Cart",
+                    "type": "string",
+                    "format": "uuid",
+                    "x-nullable": true
+                }
+            }
+        },
+        "Product": {
+            "required": [
+                "name",
+                "description",
+                "price"
+            ],
+            "type": "object",
+            "properties": {
+                "id": {
+                    "title": "Id",
+                    "type": "string",
+                    "format": "uuid",
+                    "readOnly": true
+                },
+                "name": {
+                    "title": "Name",
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 1
+                },
+                "description": {
+                    "title": "Description",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "price": {
+                    "title": "Price",
+                    "type": "string",
+                    "format": "decimal"
+                },
+                "image": {
+                    "title": "Image",
+                    "type": "string",
+                    "readOnly": true,
+                    "x-nullable": true,
+                    "format": "uri"
+                },
+                "type": {
+                    "title": "Type",
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1
+                },
+                "brand": {
+                    "title": "Brand",
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1
+                },
+                "created_at": {
+                    "title": "Created at",
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "updated_at": {
+                    "title": "Updated at",
+                    "type": "string",
+                    "format": "date-time",
+                    "readOnly": true
+                },
+                "user": {
+                    "title": "User",
+                    "type": "string",
+                    "readOnly": true
+                }
+            }
+        },
+        "Login": {
+            "required": [
+                "username",
+                "password"
+            ],
+            "type": "object",
+            "properties": {
+                "username": {
+                    "title": "Username",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "password": {
+                    "title": "Password",
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "Register": {
+            "required": [
+                "username",
+                "password"
+            ],
+            "type": "object",
+            "properties": {
+                "username": {
+                    "title": "Username",
+                    "description": "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
+                    "type": "string",
+                    "pattern": "^[\\w.@+-]+$",
+                    "maxLength": 150,
+                    "minLength": 1
+                },
+                "password": {
+                    "title": "Password",
+                    "type": "string",
+                    "maxLength": 128,
+                    "minLength": 1
+                }
+            }
+        }
+    }
+}

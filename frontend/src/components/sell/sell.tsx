@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent, useRef } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import {
     Container,
     Typography,
@@ -14,144 +14,100 @@ import {
     SelectChangeEvent,
     CircularProgress,
     Alert,
-    IconButton,
-    Avatar, // To display image previews nicely
 } from '@mui/material';
 import {
-    AddPhotoAlternate as AddPhotoAlternateIcon,
-    Cancel as CancelIcon,
-    Sell as SellIcon, // Icon for the page title
+    Sell as SellIcon,
 } from '@mui/icons-material';
 
-// Import shared components
+
 import CssBaseline from '@mui/material/CssBaseline';
 import AppTheme from '../../theme/AppTheme';
 import AppAppBar from '../shared/AppAppBar';
 import Footer from '../shared/Footer';
 import { submitListingApi } from '../../api/Listings';
-import { ListingFormData, Category, Condition, CreateType} from '../../types/listing';
+import { ListingFormData, Category, Condition, CreateType } from '../../types/listing';
+import { useAuth } from '../../context/AuthContext';
 
-// Mock API data
+
 const categories: Category[] = [
-  { id: 'electronics', name: 'Electronics' },
-  { id: 'fashion', name: 'Fashion & Apparel' },
-  { id: 'home', name: 'Home & Garden' },
-  { id: 'collectibles', name: 'Collectibles & Art' },
-  { id: 'sports', name: 'Sporting Goods' },
-  { id: 'toys', name: 'Toys & Hobbies' },
-  { id: 'motors', name: 'Motors' },
-  { id: 'other', name: 'Other' },
+    { id: 'electronics', name: 'Electronics' },
+    { id: 'fashion', name: 'Fashion & Apparel' },
+    { id: 'home', name: 'Home & Garden' },
+    { id: 'collectibles', name: 'Collectibles & Art' },
+    { id: 'sports', name: 'Sporting Goods' },
+    { id: 'toys', name: 'Toys & Hobbies' },
+    { id: 'motors', name: 'Motors' },
+    { id: 'other', name: 'Other' },
 ];
 
 const conditions: Condition[] = [
-  { id: 'new', name: 'New' },
-  { id: 'used_like_new', name: 'Used - Like New' },
-  { id: 'used_good', name: 'Used - Good' },
-  { id: 'used_fair', name: 'Used - Fair' },
-  { id: 'for_parts', name: 'For parts or not working' },
+    { id: 'new', name: 'New' },
+    { id: 'used_like_new', name: 'Used - Like New' },
+    { id: 'used_good', name: 'Used - Good' },
+    { id: 'used_fair', name: 'Used - Fair' },
+    { id: 'for_parts', name: 'For parts or not working' },
 ];
 
 
 const SellItemPage: React.FC = () => {
-    // const navigate = useNavigate();
-    // const { accessToken, isAuthenticated } = useAuth(); // Get auth state if needed for API calls
+    const { accessToken, isAuthenticated } = useAuth();
 
-    const [formData, setFormData] = useState<ListingFormData>({
-        title: '',
-        description: '',
-        category: '',
-        condition: '',
-        price: '',
-        quantity: '1', // Default quantity to 1
-        brand: '',
-        images: [] as File[],
-    });
-    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [category, setCategory] = useState('');
+    const [condition, setCondition] = useState('');
+    const [price, setPrice] = useState('');
+    const [quantity, setQuantity] = useState('1');
+    const [brand, setBrand] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-    const fileInputRef = useRef<HTMLInputElement>(null); // Ref for hidden file input
-
-    const handleInputChange = (
-        event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>,
-    ) => {
-        const { name, value } = event.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setError(null); // Clear error on new file selection
-        if (event.target.files && event.target.files.length > 0) {
-            const file = event.target.files[0]; // Only take the first file
-            setSelectedFiles([file]); // Replace the array with the single file
-
-            // Update formData.images
-            setFormData((prevData) => ({
-                ...prevData,
-                images: [file],
-            }));
-
-            // Generate preview
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreviews([reader.result as string]); // Replace previews with the single file preview
-            };
-            reader.readAsDataURL(file);
-        }
-        if (fileInputRef.current) {
-            fileInputRef.current.value = ""; // Reset file input value
-        }
-    };
-
-    const handleRemoveImage = () => {
-        setSelectedFiles([]); // Clear the selected file
-        setImagePreviews([]); // Clear the preview
-    };
-
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        if (!isAuthenticated || !accessToken) {
+            setError('You must be signed in to list an item.');
+            return;
+        }
+
         setIsSubmitting(true);
         setError(null);
         setSuccessMessage(null);
 
-        // Basic validation check
-        if (!formData.title || !formData.category || !formData.price) { // Removed image requirement
-            setError("Please fill in all required fields.");
+        if (!title || !category || !price || !description || !brand ) {
+            setError('Please fill in all required fields.');
             setIsSubmitting(false);
             return;
         }
-        if (isNaN(parseFloat(formData.price)) || parseFloat(formData.price) <= 0) {
-            setError("Please enter a valid positive price.");
+        if (isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
+            setError('Please enter a valid price.');
             setIsSubmitting(false);
             return;
         }
 
-        // Prepare the request body using FormData
         const requestBody: CreateType = {
-            name: formData.title,
-            description: formData.description,
-            price: formData.price,
-            images: formData.images,
-            type: formData.category,
-            brand: formData.brand
-        } 
+            name: title,
+            description,
+            price: price.toString(),
+            image: null,
+            type: category,
+            brand: brand || '',
+        };
 
         try {
-            console.log(formData);
-            const result = await submitListingApi(requestBody, localStorage.getItem('access_token'));
+            console.log('Sending data to API:', requestBody);
+            const result = await submitListingApi(requestBody, accessToken);
             setSuccessMessage(result.message);
-            // Optionally clear form or navigate away
-            setFormData({
-                title: '', description: '', category: '', condition: '', price: '', quantity: '1', brand: '', images: []
-            });
-            setSelectedFiles([]);
-            setImagePreviews([]);
-            // navigate(`/listing/${result.listingId}`); // Example navigation
+            setTitle('');
+            setDescription('');
+            setCategory('');
+            setCondition('');
+            setPrice('');
+            setQuantity('1');
+            setBrand('');
+            setImageUrl('');
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An unexpected error occurred.');
             console.error('Listing submission error:', err);
@@ -171,65 +127,139 @@ const SellItemPage: React.FC = () => {
 
                 <Container
                     component="main"
-                    maxWidth="md" // Use 'md' or 'lg' for form width
+                    maxWidth="md"
                     sx={{
-                        pt: `${(appBarHeight + appBarMarginTop) / 8 + 4}rem`, // Adjust padding top
-                        pb: 6, // Padding bottom
+                        pt: `${(appBarHeight + appBarMarginTop) / 8 + 4}rem`,
+                        pb: 6,
                         flexGrow: 1,
                     }}
                 >
-                    <Paper sx={{ p: { xs: 2, sm: 3, md: 4 } }}> {/* Add padding to Paper */}
-                        <Typography variant="h4" component="h1" gutterBottom sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                            <SellIcon sx={{ mr: 1.5, fontSize: '2.5rem' }} /> List an Item for Sale
+                    <Paper
+                        elevation={4}
+                        sx={{
+                            p: { xs: 3, sm: 4, md: 5 },
+                            borderRadius: 2,
+                            mb: 4,
+                            backgroundImage: 'none',
+                            border: '1px solid',
+                            borderColor: 'divider',
+                            boxShadow: theme => (
+                                theme.palette.mode === 'dark'
+                                    ? 'rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset'
+                                    : 'rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px'
+                            )
+                        }}
+                    >
+                        <Typography
+                            variant="h4"
+                            component="h1"
+                            gutterBottom
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                mb: 4,
+                                color: 'primary.main',
+                                fontWeight: 600,
+                                letterSpacing: '-0.01em'
+                            }}
+                        >
+                            <SellIcon sx={{ mr: 2, fontSize: '2.5rem' }} /> List an Item for Sale
                         </Typography>
 
                         {/* Display Success/Error Messages */}
-                        {successMessage && <Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert>}
-                        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+                        {successMessage && <Alert severity="success" sx={{ mb: 3 }}>{successMessage}</Alert>}
+                        {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
 
-                        <Box component="form" onSubmit={handleSubmit} noValidate>
-                            <Grid container spacing={3}>
+                        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 2 }}>
+                            <Grid container spacing={4}>
+                                {/* Basic Information Section */}
+                                <Grid size={12}>
+                                    <Typography
+                                        variant="h6"
+                                        sx={{
+                                            mb: 2,
+                                            pb: 1,
+                                            borderBottom: 1,
+                                            borderColor: 'divider',
+                                            fontWeight: 500,
+                                            color: theme => theme.palette.mode === 'dark' ? 'primary.light' : 'primary.dark'
+                                        }}
+                                    >
+                                        Basic Information
+                                    </Typography>
+                                </Grid>
+
                                 {/* Title */}
-                                <Grid item xs={12}>
+                                <Grid size={12}>
                                     <TextField
                                         required
                                         fullWidth
                                         id="title"
                                         label="Item Title"
                                         name="title"
-                                        value={formData.title}
-                                        onChange={handleInputChange}
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
                                         disabled={isSubmitting}
+                                        variant="outlined"
                                         autoFocus
+
                                     />
                                 </Grid>
 
                                 {/* Description */}
-                                <Grid item xs={12}>
+                                <Grid size={14}>
                                     <TextField
+                                        required
                                         fullWidth
                                         id="description"
                                         label="Description"
                                         name="description"
                                         multiline
                                         rows={4}
-                                        value={formData.description}
-                                        onChange={handleInputChange}
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
                                         disabled={isSubmitting}
+                                        variant="standard"
+                                        placeholder="Describe your item in detail - include condition, features, and any other relevant information"
+                                        error={!description && isSubmitting}
+                                        helperText={!description && isSubmitting ? "Description is required" : ""}
+                                        slotProps={{
+                                            inputLabel: {
+                                                shrink: true,
+                                            },
+                                        }}
                                     />
                                 </Grid>
 
+                                {/* Details Section */}
+                                <Grid size={12}>
+                                    <Typography
+                                        variant="h6"
+                                        sx={{
+                                            mt: 2,
+                                            mb: 2,
+                                            pb: 1,
+                                            borderBottom: 1,
+                                            borderColor: 'divider',
+                                            fontWeight: 500,
+                                            color: theme => theme.palette.mode === 'dark' ? 'primary.light' : 'primary.dark'
+                                        }}
+                                    >
+                                        Item Details
+                                    </Typography>
+                                </Grid>
+
                                 {/* Category */}
-                                <Grid item xs={12} sm={6}>
+                                <Grid size={{ xs: 12, sm: 6 }}>
                                     <FormControl fullWidth required disabled={isSubmitting}>
                                         <InputLabel id="category-label">Category</InputLabel>
                                         <Select
                                             labelId="category-label"
                                             id="category"
                                             name="category"
-                                            value={formData.category}
+                                            value={category}
+                                            onChange={(e) => setCategory(e.target.value)}
                                             label="Category"
-                                            onChange={handleInputChange}
                                         >
                                             <MenuItem value="" disabled><em>Select a Category</em></MenuItem>
                                             {categories.map((cat) => (
@@ -240,16 +270,16 @@ const SellItemPage: React.FC = () => {
                                 </Grid>
 
                                 {/* Condition */}
-                                <Grid item xs={12} sm={6}>
+                                <Grid size={{ xs: 12, sm: 6 }}>
                                     <FormControl fullWidth required disabled={isSubmitting}>
                                         <InputLabel id="condition-label">Condition</InputLabel>
                                         <Select
                                             labelId="condition-label"
                                             id="condition"
                                             name="condition"
-                                            value={formData.condition}
+                                            value={condition}
+                                            onChange={(e) => setCondition(e.target.value)}
                                             label="Condition"
-                                            onChange={handleInputChange}
                                         >
                                             <MenuItem value="" disabled><em>Select Condition</em></MenuItem>
                                             {conditions.map((cond) => (
@@ -259,24 +289,63 @@ const SellItemPage: React.FC = () => {
                                     </FormControl>
                                 </Grid>
 
+                                {/* Brand (Optional) */}
+                                <Grid size={{ xs: 12, sm: 6 }}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        id="brand"
+                                        label="Brand"
+                                        name="brand"
+                                        value={brand}
+                                        onChange={(e) => setBrand(e.target.value)}
+                                        disabled={isSubmitting}
+                                        variant="outlined"
+                                        error={!brand && isSubmitting}
+                                        helperText={!brand && isSubmitting ? "Brand is required" : ""}
+                                    />
+                                </Grid>
+
+                                {/* Pricing Section */}
+                                <Grid size={12}>
+                                    <Typography
+                                        variant="h6"
+                                        sx={{
+                                            mt: 2,
+                                            mb: 2,
+                                            pb: 1,
+                                            borderBottom: 1,
+                                            borderColor: 'divider',
+                                            fontWeight: 500,
+                                            color: theme => theme.palette.mode === 'dark' ? 'primary.light' : 'primary.dark'
+                                        }}
+                                    >
+                                        Pricing & Quantity
+                                    </Typography>
+                                </Grid>
+
                                 {/* Price */}
-                                <Grid item xs={12} sm={6}>
+                                <Grid size={{ xs: 12, sm: 6 }}>
                                     <TextField
                                         required
                                         fullWidth
                                         id="price"
                                         label="Price ($)"
                                         name="price"
-                                        type="number" // Use number type for better input control
-                                        inputProps={{ step: "0.01", min: "0.01" }} // Allow decimals, enforce positive
-                                        value={formData.price}
-                                        onChange={handleInputChange}
+                                        type="number"
+                                        inputProps={{ step: "0.01", min: "0.01" }}
+                                        value={price}
+                                        onChange={(e) => setPrice(e.target.value)}
                                         disabled={isSubmitting}
+                                        variant="outlined"
+                                        InputProps={{
+                                            startAdornment: <Box component="span" sx={{ color: 'text.secondary', mr: 0.5 }}>$</Box>,
+                                        }}
                                     />
                                 </Grid>
 
                                 {/* Quantity */}
-                                <Grid item xs={12} sm={6}>
+                                <Grid size={{ xs: 12, sm: 6 }}>
                                     <TextField
                                         required
                                         fullWidth
@@ -284,97 +353,64 @@ const SellItemPage: React.FC = () => {
                                         label="Quantity"
                                         name="quantity"
                                         type="number"
-                                        inputProps={{ step: "1", min: "1" }} // Whole numbers, positive
-                                        value={formData.quantity}
-                                        onChange={handleInputChange}
+                                        inputProps={{ step: "1", min: "1" }}
+                                        value={quantity}
+                                        onChange={(e) => setQuantity(e.target.value)}
                                         disabled={isSubmitting}
+                                        variant="outlined"
                                     />
                                 </Grid>
 
-                                {/* Brand (Optional) */}
-                                <Grid item xs={12} sm={6}>
+                                {/* Image URL Section */}
+                                {/* <Grid size={12}>
                                     <TextField
+                                        required
                                         fullWidth
-                                        id="brand"
-                                        label="Brand (Optional)"
-                                        name="brand"
-                                        value={formData.brand}
-                                        onChange={handleInputChange}
+                                        id="imageUrl"
+                                        label="Image URL"
+                                        name="imageUrl"
+                                        value={imageUrl}
+                                        onChange={(e) => setImageUrl(e.target.value)}
                                         disabled={isSubmitting}
+                                        variant="outlined"
+                                        helperText="Enter a publicly accessible image URL"
                                     />
-                                </Grid>
-
-                                {/* Image Upload */}
-                                <Grid item xs={12}>
-                                    <Typography variant="subtitle1" gutterBottom>Image (Required)</Typography>
-                                    {/* Hidden file input */}
-                                    <input
-                                        ref={fileInputRef}
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleFileChange}
-                                        style={{ display: 'none' }}
-                                        id="image-upload-input"
-                                        disabled={isSubmitting}
-                                    />
-                                    {/* Button to trigger file input */}
-                                    <label htmlFor="image-upload-input">
-                                        <Button
-                                            variant="outlined"
-                                            component="span" // Makes the button act like a label trigger
-                                            startIcon={<AddPhotoAlternateIcon />}
-                                            disabled={isSubmitting || selectedFiles.length >= 1}
-                                            sx={{ mb: 2 }}
-                                        >
-                                            Add Image
-                                        </Button>
-                                    </label>
-
-                                    {/* Image Previews */}
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-                                        {imagePreviews.map((previewUrl, index) => (
-                                            <Box key={index} sx={{ position: 'relative' }}>
-                                                <Avatar
-                                                    variant="rounded"
-                                                    src={previewUrl}
-                                                    alt={`Preview`}
-                                                    sx={{ width: 100, height: 100 }}
-                                                />
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={handleRemoveImage}
-                                                    disabled={isSubmitting}
-                                                    sx={{
-                                                        position: 'absolute',
-                                                        top: -5,
-                                                        right: -5,
-                                                        backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                                                        '&:hover': {
-                                                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                                                        },
-                                                    }}
-                                                >
-                                                    <CancelIcon fontSize="small" />
-                                                </IconButton>
-                                            </Box>
-                                        ))}
-                                    </Box>
-                                </Grid>
-
+                                </Grid> */}
 
                                 {/* Submit Button */}
-                                <Grid item xs={12}>
-                                    <Button
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary"
-                                        fullWidth
-                                        disabled={isSubmitting}
-                                        startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : null}
-                                        sx={{ mt: 2, py: 1.5 }} // Add some margin top and padding
-                                    >
-                                        {isSubmitting ? 'Submitting Listing...' : 'List Item'}
-                                    </Button>
+                                <Grid size={12}>
+                                    <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            color="primary"
+                                            size="large"
+                                            disabled={isSubmitting}
+                                            startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : null}
+                                            sx={{
+                                                py: 1.5,
+                                                px: 6,
+                                                fontSize: '1.1rem',
+                                                minWidth: '250px',
+                                                fontWeight: 600,
+                                                borderRadius: 1.5,
+                                                background: theme => theme.palette.mode === 'dark'
+                                                    ? 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)'
+                                                    : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                                                boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)',
+                                                transition: 'all 0.3s',
+                                                '&:hover': {
+                                                    transform: 'translateY(-3px)',
+                                                    boxShadow: '0 6px 10px 4px rgba(33, 203, 243, .3)'
+                                                },
+                                                '&:active': {
+                                                    transform: 'translateY(1px)',
+                                                }
+                                            }}
+                                        >
+                                            {isSubmitting ? 'Submitting...' : 'List This Item'}
+                                        </Button>
+                                    </Box>
                                 </Grid>
                             </Grid>
                         </Box>

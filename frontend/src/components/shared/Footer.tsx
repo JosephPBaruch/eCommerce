@@ -59,26 +59,6 @@ export default function Footer() {
               <SitemarkIcon />
             </Box>
           </Box>
-          {/* <Box
-            sx={{
-              display: { xs: 'none', sm: 'flex' },
-              flexDirection: 'column',
-              gap: 1,
-            }}
-          >
-            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-              Stuff
-            </Typography>
-            <Link color="text.secondary" variant="body2" href="#">
-              Things
-            </Link>
-            <Link color="text.secondary" variant="body2" href="#">
-              Foo
-            </Link>
-            <Link color="text.secondary" variant="body2" href="#">
-              Bar
-            </Link>
-          </Box> */}
           <Box
             sx={{
               display: { xs: 'none', sm: 'flex' },

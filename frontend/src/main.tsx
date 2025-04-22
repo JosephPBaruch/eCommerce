@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { StyledEngineProvider } from '@mui/material/styles';
-
+import { CartProvider } from './context/CartContext';
 // Page Imports
 import HomePage from './components/home/home';
 import SignIn from './components/login/SignIn';
@@ -11,11 +11,13 @@ import SellItemPage from './components/sell/sell';
 import UserProfilePage from './components/user/UserProfilePage';
 import OrderHistoryPage from './components/user/OrderHistory';
 import OrderDetailsPage from './components/user/OrderDetail';
-import ManageAddressesPage from './components/user/ManageAddress';
+// import ManageAddressesPage from './components/user/ManageAddress';
 import UserListingsPage from './components/user/UserListingsPage';
 import ViewListingPage from './components/listing/ViewListingPage';
-import PublicProfilePage from './components/user/PublicProfilePage';
+// import PublicProfilePage from './components/user/PublicProfilePage';
 import EditListingPage from './components/listing/EditListingPage';
+import CartPage from './components/cart/CartPage'; // Import CartPage
+import CheckoutPage from './components/checkout/CheckoutPage'; // Import CheckoutPage
 
 // Auth Imports
 import ProtectedRoute from './ProtectedRoute'; // Your protected route component
@@ -25,29 +27,33 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <StyledEngineProvider injectFirst>
       <AuthProvider>
-        <Router>
-          <Routes>
-            {/* Public Routes */}
-            <Route index element={<HomePage />} />
-            <Route path="signin" element={<SignIn />} />
-            <Route path="signup" element={<SignUp />} />
-            <Route path="user/:username" element={<PublicProfilePage />} />
-            <Route path="sell" element={<ProtectedRoute element={<SellItemPage />} />} />
-            <Route path="listing/:listingId" element={<ViewListingPage />} />
+        <CartProvider>
+          <Router>
+            <Routes>
+              {/* Public Routes */}
+              <Route index element={<HomePage />} />
+              <Route path="signin" element={<SignIn />} />
+              <Route path="signup" element={<SignUp />} />
+              {/* <Route path="user/:username" element={<PublicProfilePage />} /> */}
+              <Route path="sell" element={<ProtectedRoute element={<SellItemPage />} />} />
+              <Route path="listing/:listingId" element={<ViewListingPage />} />
 
 
-            {/* Protected Routes */}
-            <Route path="profile" element={<ProtectedRoute element={<UserProfilePage />} />} />
-            <Route path="profile/orders" element={<ProtectedRoute element={<OrderHistoryPage />} />} />
-            <Route path="profile/orders/:orderId" element={<ProtectedRoute element={<OrderDetailsPage />} />} />
-            <Route path="profile/addresses" element={<ProtectedRoute element={<ManageAddressesPage />} />} />
-            <Route path="profile/listings" element={<ProtectedRoute element={<UserListingsPage />} />} />
-            <Route path="listing/:listingId/edit" element={<ProtectedRoute element={<EditListingPage />} />} />
+              {/* Protected Routes */}
+              <Route path="cart" element={<ProtectedRoute element={<CartPage />} />} /> {/* Add Cart Route */}
+              <Route path="checkout" element={<ProtectedRoute element={<CheckoutPage />} />} /> {/* Add Checkout Route */}
+              <Route path="profile" element={<ProtectedRoute element={<UserProfilePage />} />} />
+              <Route path="profile/orders" element={<ProtectedRoute element={<OrderHistoryPage />} />} />
+              <Route path="profile/orders/:orderId" element={<ProtectedRoute element={<OrderDetailsPage />} />} />
+              {/* <Route path="profile/addresses" element={<ProtectedRoute element={<ManageAddressesPage />} />} /> */}
+              <Route path="profile/listings" element={<ProtectedRoute element={<UserListingsPage />} />} />
+              <Route path="listing/:listingId/edit" element={<ProtectedRoute element={<EditListingPage />} />} />
 
 
-            {/* <Route path="*" element={<NotFoundPage />} /> */}
-          </Routes>
-        </Router>
+              {/* <Route path="*" element={<NotFoundPage />} /> */}
+            </Routes>
+          </Router>
+        </CartProvider>
       </AuthProvider>
     </StyledEngineProvider>
   </StrictMode>,

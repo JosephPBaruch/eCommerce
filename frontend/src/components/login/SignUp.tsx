@@ -14,10 +14,10 @@ import Typography from '@mui/material/Typography';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import AppTheme from '../../theme/AppTheme';
-// import { GoogleIcon, FacebookIcon, SitemarkIcon } from '../shared/icons';
+
 import { SitemarkIcon } from '../shared/icons';
 import { useNavigate } from 'react-router-dom';
-// import { ThemedContainer } from '../../theme/themePrimitives';
+
 import AppAppBar from '../shared/AppAppBar';
 import Container from '@mui/material/Container';
 
@@ -96,8 +96,8 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       password: data.get('password'),
     };
 
-    // Update to actual api call later
-    // navigate("/signin")
+
+
     try {
       const response = await fetch('http://127.0.0.1:8080/users/register/', {
         method: 'POST',
@@ -114,10 +114,10 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       const result = await response.json();
       console.log('Success:', result);
       navigate("/signin")
-      // Handle successful registration (e.g., redirect to login page)
+
     } catch (error) {
       console.error('Error:', error);
-      // Handle registration error
+
     }
   };
 
@@ -125,9 +125,9 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
       <AppAppBar></AppAppBar>
-      <Container sx={{my: 30}}>
+      <Container sx={{ my: 30 }}>
         <Card variant="outlined">
-        <Button onClick={() => {navigate("/")}}><SitemarkIcon /></Button>
+          <Button onClick={() => { navigate("/") }}><SitemarkIcon /></Button>
           <Typography
             component="h1"
             variant="h4"

@@ -1,12 +1,14 @@
 import logging
-from rest_framework import generics, permissions
-from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
+
 from django.contrib.auth.models import User
-from rest_framework.views import APIView
+from rest_framework import generics, permissions
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from .serializers import LoginSerializer, RegisterSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from .serializers import LoginSerializer, RegisterSerializer, UserDetailSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -29,11 +31,20 @@ class LoginView(generics.GenericAPIView):
             'access': str(refresh.access_token),
         })
 
-class UserListView(APIView):
-    permission_classes = [IsAuthenticated]
+class AllUsersView(APIView):
+    permission_classes = [permissions.IsAdminUser]
     authentication_classes = [JWTAuthentication]
 
     def get(self, request, *args, **kwargs):
         users = User.objects.all()
-        user_data = [{'id': user.id, 'username': user.username, 'email': user.email} for user in users]
-        return Response(user_data)
+        serializer = UserDetailSerializer(users, many=True)
+        return Response(serializer.data)
+
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def get(self, request):
+        logger.info(f"CurrentUserView accessed by user: {request.user.username}")
+        serializer = UserDetailSerializer(request.user)
+        return Response(serializer.data)

@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import { TextField, Button, Container, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function CreateUser() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const auth = useAuth();
 
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    fetch('http://127.0.0.1:8080/users/register/', {
+
+    fetch('/users/register/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -17,48 +22,47 @@ function CreateUser() {
       if (response.ok) {
         console.log('User created!');
         loginUser(username, password);
+      } else {
+
+        console.error('Registration failed:', response.status, response.statusText);
+        response.json().then(data => console.error('Error details:', data)).catch(() => { });
       }
+    }).catch(error => {
+      console.error('Error during registration request:', error);
     });
   };
 
-  const products = () => {
-    const accessToken = localStorage.getItem('access_token');
-
-    fetch('http://127.0.0.1:8080/products/products/', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-      },
-    }).then((response) => {
-      if (response.ok) {
-        console.log(response)
-        return response.json();
-      }
-    }).then((data) => {
-      console.log(data);
-    });
-  }
-
   const loginUser = (username: string, password: string) => {
-    fetch('http://127.0.0.1:8080/users/login/', {
+
+    fetch('/users/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ username, password }),
-    }).then((response) => response.json())
+    }).then((response) => {
+      if (!response.ok) {
+
+        throw new Error(`Login failed: ${response.status} ${response.statusText}`);
+      }
+      return response.json();
+    })
       .then((data) => {
-        if (data.access) {
-          // Store the access token securely
-          localStorage.setItem('access_token', data.access);
-          console.log('User logged in!');
-          products() 
+        if (data.access && data.refresh) {
+          auth.login({ access: data.access, refresh: data.refresh });
+          console.log('User logged in via context!');
+          navigate('/');
+        } else if (data.access) {
+          console.warn('Login endpoint only returned access token.');
+          auth.login({ access: data.access, refresh: '' });
+          navigate('/');
+        } else {
+          console.error('Login failed: No access token received.', data);
         }
+      }).catch(error => {
+        console.error('Error during login request:', error);
       });
   };
-
-  
 
   return (
     <Container>
