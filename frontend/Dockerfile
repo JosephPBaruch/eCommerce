@@ -16,7 +16,7 @@ COPY --from=builder /client/dist /usr/share/nginx/html/frontend
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 5173
+EXPOSE 8084
 
 CMD ["nginx", "-g", "daemon off;"]
 

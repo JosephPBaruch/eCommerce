@@ -1,24 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: client
+  name: client-src
 spec:
   selector:
     app: client
   ports:
     - protocol: TCP
-      port: 5173
-      targetPort: 5173
+      port: 8084
+      targetPort: 8084
   type: ClusterIP
-
-
-
-
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: client-stripprefix
-spec:
-  stripPrefix:
-    prefixes:
-      - /frontend
