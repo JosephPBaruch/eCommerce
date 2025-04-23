@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ecommerce-frontend
+spec:
+  entryPoints:
+  - web
+  routes:
+  - match: Host(`domain.com`) && PathPrefix(`/frontend`)
+    kind: Rule
+    middlewares:
+    - name: strip-frontend-prefix
+    services:
+    - name: ecommerce-frontend
+      port: 80

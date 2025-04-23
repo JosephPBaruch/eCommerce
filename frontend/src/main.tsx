@@ -28,7 +28,7 @@ createRoot(document.getElementById('root')!).render(
     <StyledEngineProvider injectFirst>
       <AuthProvider>
         <CartProvider>
-          <Router>
+          <Router basename="/frontend">
             <Routes>
               {/* Public Routes */}
               <Route index element={<HomePage />} />

@@ -10,3 +10,15 @@ spec:
       port: 5173
       targetPort: 5173
   type: ClusterIP
+
+
+
+
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: client-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /frontend

@@ -1,0 +1,8 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-frontend-prefix
+spec:
+  stripPrefix:
+    prefixes:
+    - /frontend
