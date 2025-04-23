@@ -52,17 +52,12 @@ run() {
     docker run -d -p 5000:5000 --restart=always --name registry registry:2
 
     # Build and push the client Docker image
-    # if [[ "$(docker images -q $CLIENT_IMAGE 2> /dev/null)" == "" ]]; then
-    #     echo "Building the client Docker image..."
-    #     cd ../frontend
-    #     docker build -t $CLIENT_IMAGE .
-    #     cd ../frontend
-    # fi
-
-    # Use this for now
-    echo "Pulling a random client Docker image from the web..."
-    docker pull nginx:latest
-    docker tag nginx:latest $CLIENT_IMAGE
+    if [[ "$(docker images -q $CLIENT_IMAGE 2> /dev/null)" == "" ]]; then
+        echo "Building the client Docker image..."
+        cd ../frontend
+        docker build -t $CLIENT_IMAGE .
+        cd ../frontend
+    fi
 
     # # Build and push the backend Docker image
     if [[ "$(docker images -q $BACKEND_IMAGE 2> /dev/null)" == "" ]]; then
