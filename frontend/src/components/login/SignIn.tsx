@@ -122,7 +122,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
     try {
 
-      const response = await fetch('/users/login/', {
+      const response = await fetch('http://127.0.0.1:8080/v1/users/login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

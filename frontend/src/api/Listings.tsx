@@ -3,8 +3,8 @@ import { ListingDetails } from '../types/listing';
 
 
 const BASE_URL = import.meta.env.PROD
-  ? `http://${import.meta.env.VITE_BACKEND_HOST}:${import.meta.env.VITE_BACKEND_PORT}`
-  : '/api';
+  ? `http://127.0.0.1:8080/v1`
+  : '/api/v1';
 
 
 const getAuthHeader = (accessToken: string | null): HeadersInit => {
