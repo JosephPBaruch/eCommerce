@@ -1,8 +1,6 @@
 import { CartItem, FullCartItem } from '../types/cart';
 
-const BASE_URL = import.meta.env.PROD
-  ? `http://${import.meta.env.VITE_BACKEND_HOST}:${import.meta.env.VITE_BACKEND_PORT}`
-  : '/api';
+const BASE_URL = `http://127.0.0.1:8080/v1`
 
 const getAuthHeader = (accessToken: string | null): HeadersInit => {
   const headers: HeadersInit = {
