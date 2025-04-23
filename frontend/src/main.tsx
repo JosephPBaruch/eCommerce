@@ -31,8 +31,8 @@ createRoot(document.getElementById('root')!).render(
           <Router>
             <Routes>
               {/* Public Routes */}
-              <Route index element={<HomePage />} />
-              <Route path="signin" element={<SignIn />} />
+              <Route path="frontend/"index element={<HomePage />} />
+              <Route path="frontend/signin" element={<SignIn />} />
               <Route path="signup" element={<SignUp />} />
               {/* <Route path="user/:username" element={<PublicProfilePage />} /> */}
               <Route path="sell" element={<ProtectedRoute element={<SellItemPage />} />} />
