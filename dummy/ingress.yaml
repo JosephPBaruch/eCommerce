@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: a3ingress
   annotations:
-    ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false" # Updated annotation
 spec:
   rules:
   - http:
