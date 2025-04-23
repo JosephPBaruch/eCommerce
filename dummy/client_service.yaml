@@ -8,5 +8,6 @@ spec:
   ports:
     - protocol: TCP
       port: 5173
+      name: http
       targetPort: 5173
   type: ClusterIP
