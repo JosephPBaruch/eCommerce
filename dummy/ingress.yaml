@@ -5,6 +5,9 @@ metadata:
   annotations:
     ingress.kubernetes.io/ssl-redirect: "false"
 spec:
+  tls:
+    - hosts:
+      - joestack.org
   rules:
   - http:
       paths:
