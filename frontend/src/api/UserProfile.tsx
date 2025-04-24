@@ -6,7 +6,7 @@ export const fetchUserProfileData = async (accessToken: string|null): Promise<Us
     throw new Error('Unauthorized');
   }
   try {
-    const response = await fetch(`http://joestack.org:8080/v1/users/me/`, {
+    const response = await fetch(`http://joestack.org/v1/users/me/`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

@@ -3,7 +3,7 @@ import { ListingDetails } from '../types/listing';
 
 
 const BASE_URL = import.meta.env.PROD
-  ? `http://joestack.org:8080/v1`
+  ? `http://joestack.org/v1`
   : '/api/v1';
 
 
