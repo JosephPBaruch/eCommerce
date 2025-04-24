@@ -12,7 +12,6 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["joestack.org"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -121,6 +120,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+ALLOWED_HOSTS = ["joestack.org", 
+                 "127.0.0.1"]
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'Bearer': {
