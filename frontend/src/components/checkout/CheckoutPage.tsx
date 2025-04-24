@@ -184,7 +184,7 @@ const CheckoutPage: React.FC = () => {
       };
 
       // Make API call to create order
-      const response = await fetch('https://joestack.org/v1/api/orders/', {
+      const response = await fetch('https://joestack.org/v1/orders/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
