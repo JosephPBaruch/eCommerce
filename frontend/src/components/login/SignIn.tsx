@@ -122,7 +122,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
 
     try {
 
-      const response = await fetch('http://joestack.org:8080/v1/users/login/', {
+      const response = await fetch('http://joestack.org/v1/users/login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
