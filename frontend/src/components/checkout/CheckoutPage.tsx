@@ -190,9 +190,14 @@ const CheckoutPage: React.FC = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         },
-        body: JSON.stringify(orderData)
+        body: JSON.stringify({
+          created_at: new Date().toISOString(), 
+          status: "Recieved", 
+          cart: cartId
+        })
       });
 
+      console.log(orderData)
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to place order');
