@@ -187,7 +187,7 @@ const ViewListingPage: React.FC = () => {
               <Box sx={{ mb: 2, position: 'relative', paddingTop: '75%', /* Aspect ratio 4:3 */ backgroundColor: 'grey.200', borderRadius: 1, overflow: 'hidden' }}>
                 <Box
                   component="img"
-                  src={currentImage.url || '/path/to/placeholder.png'}
+                  src={currentImage.url || "https://picsum.photos/seed/${listingDetails.id}/200/300"}
                   alt={currentImage.altText || listingDetails.title}
                   sx={{
                     position: 'absolute',
@@ -207,7 +207,7 @@ const ViewListingPage: React.FC = () => {
                     <Box
                       key={img.id || index}
                       component="img"
-                      src={img.url}
+                      src={"https://picsum.photos/seed/${listingDetails.id}/200/300"}
                       alt={img.altText || `Thumbnail ${index + 1}`}
                       onClick={() => setSelectedImageIndex(index)}
                       sx={{

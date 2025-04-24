@@ -257,7 +257,8 @@ export default function MainContent() {
                     <CardMedia
                       component="img"
                       alt={listing.title}
-                      image={listing.imageUrl || `https://picsum.photos/400/300?random=${index + 1}`}
+                      key={index}
+                      image={listing.imageUrl || "https://picsum.photos/seed/${listing.id}/200/300"}
                     />
                     <StyledCardContent>
                       <StyledTypography gutterBottom variant="h6" as="div">
