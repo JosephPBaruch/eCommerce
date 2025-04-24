@@ -99,7 +99,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
 
 
     try {
-      const response = await fetch('http://joestack.org/v1/users/register/', {
+      const response = await fetch('https://joestack.org/v1/users/register/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

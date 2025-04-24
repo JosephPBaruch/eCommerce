@@ -1,6 +1,6 @@
 import { CartItem, FullCartItem } from '../types/cart';
 
-const BASE_URL = `http://joestack.org/v1`
+const BASE_URL = `https://joestack.org/v1`
 
 const getAuthHeader = (accessToken: string | null): HeadersInit => {
   const headers: HeadersInit = {
