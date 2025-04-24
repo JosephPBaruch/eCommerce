@@ -21,7 +21,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         return []
 
     def get_queryset(self):
-        return Product.objects.filter()
+        return Product.objects.filter(status='active')
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -36,7 +36,7 @@ class ProductListingViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
 
     def list(self, request, *args, **kwargs):
-        products = self.queryset.values('id', 'image', 'description', 'price')
+        products = self.queryset.filter(status='active').values('id', 'image', 'description', 'price')
         return Response(products)
 
 class UserProductViewSet(ListModelMixin, GenericViewSet):
@@ -45,7 +45,7 @@ class UserProductViewSet(ListModelMixin, GenericViewSet):
     authentication_classes = [JWTAuthentication]
 
     def get_queryset(self):
-        return Product.objects.filter(user=self.request.user)
+        return Product.objects.filter(user=self.request.user, status='active')
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -57,9 +57,10 @@ class DeleteProductView(APIView):
     authentication_classes = [JWTAuthentication]
 
     def delete(self, request, pk, *args, **kwargs):
-        product = get_object_or_404(Product, pk=pk, user=request.user)
-        product.delete()
-        return Response({"detail": "Product deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        product = get_object_or_404(Product, pk=pk, user=request.user, status='active')
+        product.status = 'archive'
+        product.save()
+        return Response({"detail": "Product archived successfully."}, status=status.HTTP_204_NO_CONTENT)
 
 class ProductEditView(APIView):
     permission_classes = [IsAuthenticated]
