@@ -55,7 +55,7 @@ run() {
     if [[ "$(docker images -q $CLIENT_IMAGE 2> /dev/null)" == "" ]]; then
         echo "Building the client Docker image..."
         cd ../frontend
-        docker build -t $CLIENT_IMAGE .
+        docker build --no-cache -t $CLIENT_IMAGE .
         cd ../frontend
     fi
 
@@ -63,7 +63,7 @@ run() {
     if [[ "$(docker images -q $BACKEND_IMAGE 2> /dev/null)" == "" ]]; then
         echo "Building the backend Docker image..."
         cd ../ecommerce_backend
-        docker build -t $BACKEND_IMAGE .
+        docker build --no-cache -t $BACKEND_IMAGE .
         cd ../dummy
     fi
 
