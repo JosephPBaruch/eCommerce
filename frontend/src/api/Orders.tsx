@@ -2,7 +2,7 @@ import { ApiOrder, Order, Cart, CartItem } from '../types/listing';
 
 
 const BASE_URL = import.meta.env.PROD
-    ? `http://127.0.0.1:8080/v1`
+    ? `http://joestack.org:8080/v1`
     : '/api';
 
 const getAuthHeader = (token: string | null): HeadersInit => {
