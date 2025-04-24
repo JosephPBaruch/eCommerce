@@ -4,6 +4,7 @@ from .models import Order
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .serializers import OrdersSerializer
+from rest_framework.exceptions import PermissionDenied
 
 class OrdersViewSet(viewsets.ModelViewSet):
     serializer_class = OrdersSerializer
@@ -16,14 +17,7 @@ class OrdersViewSet(viewsets.ModelViewSet):
         return []
 
     def get_queryset(self):
-        return Order.objects.filter()
-    
-    # def perform_create(self, serializer):
-    #     cart_id = self.request.data.get('cart')  # Get cart ID from the request body
-    #     if not cart_id:
-    #         raise ValueError("Cart ID is required.")  # Raise an error if cart ID is missing
-    #     cart = Cart.objects.get(id=cart_id)  # Fetch the cart instance
-    #     order = serializer.save(cart=cart)  # Link cart to order
-    #     total_price = sum(item.price * item.quantity for item in cart.items.all())  # Calculate total price from cart items
-    #     order.total_price = total_price
-    #     order.save()
+        user = self.request.user
+        if not user.is_authenticated:
+            raise PermissionDenied("You are not authorized to view these orders.")
+        return Order.objects.filter(cart__user=user)
