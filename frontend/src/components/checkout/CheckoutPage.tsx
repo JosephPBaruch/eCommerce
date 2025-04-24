@@ -192,7 +192,7 @@ const CheckoutPage: React.FC = () => {
         },
         body: JSON.stringify({
           created_at: new Date().toISOString(), 
-          status: "Recieved", 
+          status: "Received", 
           cart: cartId
         })
       });
